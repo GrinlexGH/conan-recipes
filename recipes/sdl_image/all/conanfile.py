@@ -46,7 +46,7 @@ class SDLImageConan(ConanFile):
 
     def build_requirements(self):
         self.tool_requires("cmake/[>=3.16]")
-    
+
     def requirements(self):
         self.requires("sdl/[>=3.2.20]")
 
