@@ -57,5 +57,5 @@ class GlmConan(ConanFile):
         copy(self, "copying.txt", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
-        self.cpp_info.builddirs = ["share"]
+        self.cpp_info.builddirs = [""]
         self.cpp_info.set_property("cmake_find_mode", "none")
