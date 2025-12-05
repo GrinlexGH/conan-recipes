@@ -1,0 +1,13 @@
+diff --git a/libs/cobalt/CMakeLists.txt b/libs/cobalt/CMakeLists.txt
+index 45dfa4b..34e71d8 100644
+--- a/libs/cobalt/CMakeLists.txt
++++ b/libs/cobalt/CMakeLists.txt
+@@ -73,7 +73,7 @@ if (NOT BOOST_COBALT_IS_ROOT)
+     endif()
+ 
+     if(MINGW OR CYGWIN)
+-        target_link_libraries(boost_cobalt PUBLIC ws2_32)
++        target_link_libraries(boost_cobalt PUBLIC ws2_32 bcrypt mswsock)
+     endif()
+ 
+     if (BOOST_COBALT_USE_BOOST_CONTAINER)

@@ -1,0 +1,4 @@
+sources:
+  "2.0.0rc13":
+    url: "https://github.com/tinyobjloader/tinyobjloader/archive/refs/tags/v2.0.0rc13.zip"
+    sha256: "ed8d10e23a40c392a9d2db60b48428c88d0617949208e5c7514536fe5cea2414"

@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.15)
+project(PackageTest CXX)
+
+find_package(tinyobjloader CONFIG REQUIRED)
+
+add_executable(example src/example.cpp)
+if(TARGET tinyobjloader::tinyobjloader_double)
+    target_link_libraries(example PRIVATE tinyobjloader::tinyobjloader_double)
+else()
+    target_link_libraries(example PRIVATE tinyobjloader::tinyobjloader)
+endif()
+if(tinyobjloader_VERSION VERSION_GREATER_EQUAL "1.0.7")
+    target_compile_definitions(example PRIVATE TINYOBJLOADER_GE_1_0_7)
+endif()
+if(tinyobjloader_VERSION VERSION_GREATER_EQUAL "2")
+    target_compile_definitions(example PRIVATE TINYOBJLOADER_GE_2)
+endif()

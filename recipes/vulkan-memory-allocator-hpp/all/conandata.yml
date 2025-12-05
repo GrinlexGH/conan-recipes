@@ -1,0 +1,4 @@
+sources:
+  "3.3.0-rc":
+    url: "https://github.com/YaaZ/VulkanMemoryAllocator-Hpp.git"
+    commit: "9ad83c923f578d4e3137a5f42d429467379dbe86"
