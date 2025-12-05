@@ -68,5 +68,5 @@ class TinyObjLoaderConan(ConanFile):
         replace_in_file(self, header_fullpath, implementation, "")
 
     def package_info(self):
-        self.cpp_info.builddirs = [os.path.join("lib", "tinyobjloader", "cmake")]
+        self.cpp_info.builddirs = [""]
         self.cpp_info.set_property("cmake_find_mode", "none")
