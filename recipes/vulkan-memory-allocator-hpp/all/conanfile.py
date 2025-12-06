@@ -7,9 +7,6 @@ from conan.tools.scm import Git
 
 class vulkan_memory_allocator_hppRecipe(ConanFile):
     name = "vulkan-memory-allocator-hpp"
-    package_type = "header-library"
-    implements = ["auto_header_only"]
-
     license = "CC0 1.0 Universal"
     author = "YaaZ"
     homepage = "https://github.com/YaaZ/VulkanMemoryAllocator-Hpp"
