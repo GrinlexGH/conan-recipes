@@ -4,5 +4,5 @@ sources:
     sha256: "8ee39bee575bdccc1ecacd0bdb26f181841de35d7409a3eca468c6b622daa2f1"
 patches:
   "1.4.335":
-    - patch_file: "patches/1.4.335/0001-fix-cmake.patch"
+    - patch_file: "patches/1.4.335/0001-module-name-fix.patch"
       patch_description: "Wrong module name in vulkan_video.cppm"
