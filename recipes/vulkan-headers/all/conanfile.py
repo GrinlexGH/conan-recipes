@@ -1,7 +1,7 @@
 import os
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
-from conan.tools.files import copy, get, apply_conandata_patches
+from conan.tools.files import copy, get, apply_conandata_patches, export_conandata_patches,
 
 
 class VulkanHeadersConan(ConanFile):
@@ -15,6 +15,9 @@ class VulkanHeadersConan(ConanFile):
 
     def layout(self):
         cmake_layout(self, src_folder="src")
+
+    def export_sources(self):
+        export_conandata_patches(self)
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
