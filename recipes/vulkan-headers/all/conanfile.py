@@ -11,9 +11,6 @@ class VulkanHeadersConan(ConanFile):
     topics = ("vulkan-headers", "vulkan")
     homepage = "https://github.com/KhronosGroup/Vulkan-Headers"
 
-    package_type = "header-library"
-    implements = ["auto_header_only"]
-
     settings = "os", "arch", "compiler", "build_type"
 
     def layout(self):
