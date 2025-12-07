@@ -20,13 +20,13 @@ class GlmConan(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "header_only": [True, False],
+        "use_modules": [True, False],
     }
 
     default_options = {
         "shared": False,
         "fPIC": True,
-        "header_only": False,
+        "use_modules": False,
     }
 
     def layout(self):
@@ -37,19 +37,10 @@ class GlmConan(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
-        tc.variables["GLM_BUILD_LIBRARY"] = not self.options.header_only
-        tc.variables["GLM_BUILD_TESTS"] = False
-        tc.variables["GLM_BUILD_INSTALL"] = True
-        if int(self.settings.get_safe("compiler.cppstd")) >= 20:
-            tc.variables["GLM_ENABLE_CXX_20"] = True
-        elif int(self.settings.get_safe("compiler.cppstd")) >= 17:
-            tc.variables["GLM_ENABLE_CXX_17"] = True
-        elif int(self.settings.get_safe("compiler.cppstd")) >= 14:
-            tc.variables["GLM_ENABLE_CXX_14"] = True
-        elif int(self.settings.get_safe("compiler.cppstd")) >= 11:
-            tc.variables["GLM_ENABLE_CXX_11"] = True
-        elif int(self.settings.get_safe("compiler.cppstd")) >= 98:
-            tc.variables["GLM_ENABLE_CXX_98"] = True
+        tc.variables["FMT_DOC"] = "OFF"
+        tc.variables["FMT_INSTALL"] = "ON"
+        tc.variables["FMT_TEST"] = "OFF"
+        tc.variables["FMT_MODULE"] = "ON" if self.options.use_modules else "OFF"
         tc.generate()
 
     def build(self):
@@ -60,7 +51,7 @@ class GlmConan(ConanFile):
     def package(self):
         cmake = CMake(self)
         cmake.install()
-        copy(self, "copying.txt", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
+        copy(self, pattern="LICENSE", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
         self.cpp_info.builddirs = [""]
