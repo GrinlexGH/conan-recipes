@@ -6,7 +6,7 @@ from conan.tools.files import copy, get
 required_conan_version = ">=2.0.0"
 
 
-class GlmConan(ConanFile):
+class FmtConan(ConanFile):
     name = "fmt"
     description = "A safe and fast alternative to printf and IOStreams."
     license = "MIT"
