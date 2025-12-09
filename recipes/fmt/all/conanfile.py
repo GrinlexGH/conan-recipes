@@ -7,12 +7,12 @@ required_conan_version = ">=2.0.0"
 
 
 class GlmConan(ConanFile):
-    name = "glm"
-    description = "OpenGL Mathematics (GLM)"
-    topics = ("glm", "opengl", "mathematics")
-    url = "https://github.com/conan-io/conan-center-index"
-    homepage = "https://github.com/g-truc/glm"
+    name = "fmt"
+    description = "A safe and fast alternative to printf and IOStreams."
     license = "MIT"
+    url = "https://github.com/conan-io/conan-center-index"
+    homepage = "https://github.com/fmtlib/fmt"
+    topics = ("format", "iostream", "printf")
 
     package_type = "library"
 
