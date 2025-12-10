@@ -3,13 +3,15 @@ from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
 from conan.tools.files import copy, get, apply_conandata_patches, export_conandata_patches
 
+required_conan_version = ">=2.20"
+
 
 class VulkanHeadersConan(ConanFile):
     name = "vulkan-headers"
     description = "Vulkan Header files."
+    homepage = "https://github.com/KhronosGroup/Vulkan-Headers"
     license = "Apache-2.0"
     topics = ("vulkan-headers", "vulkan")
-    homepage = "https://github.com/KhronosGroup/Vulkan-Headers"
 
     settings = "os", "arch", "compiler", "build_type"
 

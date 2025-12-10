@@ -3,30 +3,29 @@ from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
 from conan.tools.files import copy, get
 
-required_conan_version = ">=2.0.0"
+required_conan_version = ">=2.20"
 
 
 class GlmConan(ConanFile):
     name = "glm"
     description = "OpenGL Mathematics (GLM)"
-    topics = ("glm", "opengl", "mathematics")
-    url = "https://github.com/conan-io/conan-center-index"
     homepage = "https://github.com/g-truc/glm"
     license = "MIT"
+    topics = ("glm", "opengl", "mathematics")
 
     package_type = "library"
+    implements = ["auto_shared_fpic"]
 
     settings = "os", "arch", "compiler", "build_type"
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "header_only": [True, False],
     }
 
     default_options = {
         "shared": False,
         "fPIC": True,
-        "header_only": False,
     }
 
     def layout(self):
@@ -37,7 +36,7 @@ class GlmConan(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
-        tc.variables["GLM_BUILD_LIBRARY"] = not self.options.header_only
+        tc.variables["GLM_BUILD_LIBRARY"] = not self.options.get_safe("header_only")
         tc.variables["GLM_BUILD_TESTS"] = False
         tc.variables["GLM_BUILD_INSTALL"] = True
         if int(self.settings.get_safe("compiler.cppstd")) >= 20:

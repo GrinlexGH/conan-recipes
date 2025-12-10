@@ -13,7 +13,7 @@ from conan.tools.files import (
 )
 from conan.tools.microsoft import is_msvc, is_msvc_static_runtime
 
-required_conan_version = ">=2.0.0"
+required_conan_version = ">=2.20"
 
 CONFIGURE_OPTIONS = (
     "accumulators",
@@ -174,12 +174,15 @@ CONFIGURE_OPTIONS = (
 class BoostConan(ConanFile):
     name = "boost"
     description = "Boost provides free peer-reviewed portable C++ source libraries"
-    url = "https://github.com/conan-io/conan-center-index"
     homepage = "https://www.boost.org"
     license = "BSL-1.0"
     topics = ("libraries", "cpp")
 
+    package_type = "library"
+    implements = ["auto_shared_fpic"]
+
     settings = "os", "arch", "compiler", "build_type"
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],

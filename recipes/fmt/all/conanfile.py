@@ -3,20 +3,21 @@ from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
 from conan.tools.files import copy, get
 
-required_conan_version = ">=2.0.0"
+required_conan_version = ">=2.20"
 
 
 class FmtConan(ConanFile):
     name = "fmt"
     description = "A safe and fast alternative to printf and IOStreams."
-    license = "MIT"
-    url = "https://github.com/conan-io/conan-center-index"
     homepage = "https://github.com/fmtlib/fmt"
+    license = "MIT"
     topics = ("format", "iostream", "printf")
 
     package_type = "library"
+    implements = ["auto_shared_fpic"]
 
     settings = "os", "arch", "compiler", "build_type"
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],

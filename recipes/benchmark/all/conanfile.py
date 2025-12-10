@@ -3,15 +3,30 @@ from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
 from conan.tools.files import copy, get, apply_conandata_patches, export_conandata_patches
 
+required_conan_version = ">=2.20"
+
 
 class BenchmarkConan(ConanFile):
     name = "benchmark"
     description = "A microbenchmark support library"
+    homepage = "https://github.com/google/benchmark"
     license = "Apache License"
     topics = ("benchmark", "google")
-    homepage = "https://github.com/google/benchmark"
+
+    package_type = "library"
+    implements = ["auto_shared_fpic"]
 
     settings = "os", "arch", "compiler", "build_type"
+
+    options = {
+        "shared": [True, False],
+        "fPIC": [True, False],
+    }
+
+    default_options = {
+        "shared": False,
+        "fPIC": True,
+    }
 
     def layout(self):
         cmake_layout(self, src_folder="src")

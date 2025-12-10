@@ -1,27 +1,30 @@
+import os
 from conan import ConanFile
 from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, load, replace_in_file, save
 from conan.tools.scm import Version
-import os
 
-required_conan_version = ">=2.0.0"
+required_conan_version = ">=2.20"
 
 
 class ZlibConan(ConanFile):
     name = "zlib"
-    package_type = "library"
-    url = "https://github.com/conan-io/conan-center-index"
-    homepage = "https://zlib.net"
-    license = "Zlib"
     description = ("A Massively Spiffy Yet Delicately Unobtrusive Compression Library "
                    "(Also Free, Not to Mention Unencumbered by Patents)")
+    homepage = "https://zlib.net"
+    license = "Zlib"
     topics = ("zlib", "compression")
 
+    package_type = "library"
+    implements = ["auto_shared_fpic"]
+
     settings = "os", "arch", "compiler", "build_type"
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
     }
+
     default_options = {
         "shared": False,
         "fPIC": True,

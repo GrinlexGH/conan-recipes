@@ -1,23 +1,23 @@
 import os
-
 from conan import ConanFile
-from conan.errors import ConanInvalidConfiguration
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
-from conan.tools.files import copy, get, rmdir
-from conan.tools.scm import Version
+from conan.tools.files import copy, get
 
+required_conan_version = ">=2.20"
 
-required_conan_version = ">=2.4"
 
 class SDLImageConan(ConanFile):
     name = "sdl_image"
     description = "SDL_image is an image file loading library"
-    topics = ("sdl2", "sdl", "images", "opengl")
-    url = "https://github.com/conan-io/conan-center-index"
     homepage = "https://github.com/libsdl-org/SDL_image"
     license = "MIT"
+    topics = ("sdl2", "sdl", "images", "opengl")
+
     package_type = "library"
+    implements = ["auto_shared_fpic"]
+
     settings = "os", "arch", "compiler", "build_type"
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
@@ -28,6 +28,7 @@ class SDLImageConan(ConanFile):
         "with_avif": [True, False],
         "with_jxl": [True, False],
     }
+
     default_options = {
         "shared": False,
         "fPIC": True,
@@ -38,8 +39,6 @@ class SDLImageConan(ConanFile):
         "with_avif": True,
         "with_jxl": False,
     }
-    implements = ["auto_shared_fpic"]
-    languages = "C"
 
     def layout(self):
         cmake_layout(self, src_folder="src")

@@ -1,32 +1,35 @@
+import os
 from conan import ConanFile
 from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout
 from conan.tools.files import apply_conandata_patches, get, export_conandata_patches, load, replace_in_file, rmdir
 from conan.tools.scm import Version
-import os
 
-required_conan_version = ">=2.1"
+required_conan_version = ">=2.20"
 
 
 class TinyObjLoaderConan(ConanFile):
     name = "tinyobjloader"
     description = "Tiny but powerful single file wavefront obj loader"
-    license = "MIT"
-    url = "https://github.com/conan-io/conan-center-index"
     homepage = "https://github.com/syoyo/tinyobjloader"
+    license = "MIT"
     topics = ("loader", "obj", "3d", "wavefront", "geometry")
+
     package_type = "library"
+    implements = ["auto_shared_fpic"]
+
     settings = "os", "arch", "build_type", "compiler"
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
         "double": [True, False],
     }
+
     default_options = {
         "shared": False,
         "fPIC": True,
         "double": False,
     }
-    implements = ["auto_shared_fpic"]
 
     def export_sources(self):
         export_conandata_patches(self)

@@ -1,16 +1,16 @@
-import os
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, get
 from conan.tools.scm import Git
 
+required_conan_version = ">=2.20"
+
 
 class vulkan_memory_allocator_hppRecipe(ConanFile):
     name = "vulkan-memory-allocator-hpp"
-    license = "CC0 1.0 Universal"
-    author = "YaaZ"
-    homepage = "https://github.com/YaaZ/VulkanMemoryAllocator-Hpp"
     description = "C++ bindings for VulkanMemoryAllocator"
+    homepage = "https://github.com/YaaZ/VulkanMemoryAllocator-Hpp"
+    license = "CC0 1.0 Universal"
     topics = ("VulkanMemoryAllocator-Hpp", "Vulkan", "Header Only")
 
     settings = "os", "compiler", "build_type", "arch"
