@@ -83,5 +83,3 @@ class SteamworksSDKRecipe(ConanFile):
         component_ticket.libdirs = self.cpp_info.libdirs
         component_ticket.set_property("nosoname", True)
         component_ticket.requires = ["SteamAPI"]
-
-        self.cpp_info.libs = component_api.libs + component_ticket.libs
