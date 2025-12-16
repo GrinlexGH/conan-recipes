@@ -19,7 +19,7 @@ class vulkan_memory_allocator_hppRecipe(ConanFile):
         export_conandata_patches(self)
 
     def requirements(self):
-        self.requires("vulkan-headers/[>=1.4.335]")
+        self.requires("vulkan-headers/[>=1.4.336]")
 
     def source(self):
         src_data = self.conan_data["sources"][self.version]
