@@ -1,20 +1,22 @@
 import os
+
 from conan import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
-from conan.tools.files import copy, get
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
 
 required_conan_version = ">=2.20"
 
 
 class GlmConan(ConanFile):
     name = "glm"
-    description = "OpenGL Mathematics (GLM)"
-    homepage = "https://github.com/g-truc/glm"
-    license = "MIT"
-    topics = ("glm", "opengl", "mathematics")
-
     package_type = "library"
     implements = ["auto_shared_fpic"]
+
+    license = "MIT"
+    author = "g-truc"
+    description = "OpenGL Mathematics (GLM)"
+    homepage = "https://github.com/g-truc/glm"
+    topics = ("glm", "opengl", "mathematics")
 
     settings = "os", "arch", "compiler", "build_type"
 
@@ -28,13 +30,19 @@ class GlmConan(ConanFile):
         "fPIC": True,
     }
 
+    def export_sources(self):
+        export_conandata_patches(self)
+
+    def source(self):
+        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder)
+        apply_conandata_patches(self)
+
     def layout(self):
         cmake_layout(self, src_folder="src")
 
-    def source(self):
-        get(self, **self.conan_data["sources"][self.version])
-
     def generate(self):
+        deps = CMakeDeps(self)
+        deps.generate()
         tc = CMakeToolchain(self)
         tc.variables["GLM_BUILD_LIBRARY"] = not self.options.get_safe("header_only")
         tc.variables["GLM_BUILD_TESTS"] = False

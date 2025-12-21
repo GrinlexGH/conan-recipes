@@ -5,7 +5,7 @@ from conan.tools.cmake import CMake, cmake_layout
 from conan.tools.build import can_run
 
 
-class frozenTestConan(ConanFile):
+class xz_utilsTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps", "CMakeToolchain"
 

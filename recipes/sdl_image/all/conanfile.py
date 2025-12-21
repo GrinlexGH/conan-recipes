@@ -1,20 +1,22 @@
 import os
+
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
-from conan.tools.files import copy, get
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
 
 required_conan_version = ">=2.20"
 
 
 class SDLImageConan(ConanFile):
     name = "sdl_image"
-    description = "SDL_image is an image file loading library"
-    homepage = "https://github.com/libsdl-org/SDL_image"
-    license = "MIT"
-    topics = ("sdl2", "sdl", "images", "opengl")
-
     package_type = "library"
     implements = ["auto_shared_fpic"]
+
+    license = "MIT"
+    author = "libsdl-org"
+    description = "SDL_image is an image file loading library"
+    homepage = "https://github.com/libsdl-org/SDL_image"
+    topics = ("sdl2", "sdl", "images", "opengl")
 
     settings = "os", "arch", "compiler", "build_type"
 
@@ -40,19 +42,22 @@ class SDLImageConan(ConanFile):
         "with_jxl": False,
     }
 
-    def layout(self):
-        cmake_layout(self, src_folder="src")
+    def export_sources(self):
+        export_conandata_patches(self)
 
-    def build_requirements(self):
-        self.tool_requires("cmake/[>=3.16]")
+    def source(self):
+        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
+        apply_conandata_patches(self)
 
     def requirements(self):
         self.requires("sdl/[>=3.2.20]")
 
-    def source(self):
-        get(self, **self.conan_data["sources"][self.version], strip_root=True)
+    def layout(self):
+        cmake_layout(self, src_folder="src")
 
     def generate(self):
+        deps = CMakeDeps(self)
+        deps.generate()
         tc = CMakeToolchain(self)
         tc.cache_variables["SDLIMAGE_DEPS_SHARED"] = False
         tc.cache_variables["SDLIMAGE_SAMPLES"] = False
@@ -73,9 +78,9 @@ class SDLImageConan(ConanFile):
         cmake.build()
 
     def package(self):
-        copy(self, "LICENSE.txt", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
         cmake = CMake(self)
         cmake.install()
+        copy(self, "LICENSE*", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
         self.cpp_info.builddirs = [""]

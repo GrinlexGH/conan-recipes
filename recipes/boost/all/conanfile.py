@@ -2,15 +2,11 @@ import os
 import sys
 from io import StringIO
 import yaml
+
 from conan import ConanFile
 from conan.errors import ConanException, ConanInvalidConfiguration
-from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
-from conan.tools.files import (
-    apply_conandata_patches,
-    copy,
-    export_conandata_patches,
-    get,
-)
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
 from conan.tools.microsoft import is_msvc, is_msvc_static_runtime
 
 required_conan_version = ">=2.20"
@@ -61,8 +57,8 @@ CONFIGURE_OPTIONS = (
     "foreach",
     "format",
     "function",
-    "functional",
     "function_types",
+    "functional",
     "fusion",
     "geometry",
     "gil",
@@ -86,8 +82,8 @@ CONFIGURE_OPTIONS = (
     "lambda2",
     "leaf",
     "lexical_cast",
-    "locale",
     "local_function",
+    "locale",
     "lockfree",
     "log",
     "logic",
@@ -99,11 +95,16 @@ CONFIGURE_OPTIONS = (
     "mpl",
     "mqtt5",
     "msm",
-    "multiprecision",
     "multi_array",
     "multi_index",
+    "multiprecision",
     "mysql",
     "nowide",
+    "numeric_conversion",
+    "numeric_interval",
+    "numeric_odeint",
+    "numeric_ublas",
+    "openmethod",
     "optional",
     "outcome",
     "parameter",
@@ -111,8 +112,8 @@ CONFIGURE_OPTIONS = (
     "parser",
     "pfr",
     "phoenix",
-    "polygon",
     "poly_collection",
+    "polygon",
     "pool",
     "predef",
     "preprocessor",
@@ -152,10 +153,10 @@ CONFIGURE_OPTIONS = (
     "tokenizer",
     "tti",
     "tuple",
-    "typeof",
     "type_erasure",
     "type_index",
     "type_traits",
+    "typeof",
     "units",
     "unordered",
     "url",
@@ -227,6 +228,7 @@ class BoostConan(ConanFile):
         "thread_threadapi": [None, "winapi", "pthread"],
     }
     options.update({f"with_{_name}": [None, True, False] for _name in CONFIGURE_OPTIONS})
+    options.update({f"without_{_name}": [None, True, False] for _name in CONFIGURE_OPTIONS})
 
     default_options = {
         "shared": False,
@@ -272,6 +274,7 @@ class BoostConan(ConanFile):
         "thread_threadapi": None,
     }
     default_options.update({f"with_{_name}": None for _name in CONFIGURE_OPTIONS})
+    default_options.update({f"without_{_name}": None for _name in CONFIGURE_OPTIONS})
 
     short_paths = True
     no_copy_source = True
@@ -320,7 +323,7 @@ class BoostConan(ConanFile):
 
         # Test whether all config_options from the yml are available in CONFIGURE_OPTIONS
         for opt_name in self._available_libraries:
-            if f"with_{opt_name}" not in self.options:
+            if (f"with_{opt_name}" not in self.options) or (f"without_{opt_name}" not in self.options):
                 raise ConanException(f"{self._dependency_filename} has the configure options {opt_name} which is not available in conanfile.py")
 
         # Remove options not supported by this version of boost
@@ -387,27 +390,26 @@ class BoostConan(ConanFile):
 
     def requirements(self):
         if self.options.iostreams_zlib:
-            self.requires("zlib/[>=1.2.11]")
+            self.requires("zlib/[>=1.3.1]")
         if self.options.iostreams_bzip2:
             self.requires("bzip2/1.0.8")
         if self.options.iostreams_lzma:
-            self.requires("xz_utils/[>=5.4.5]")
+            self.requires("xz_utils/[>=5.8.2]")
         if self.options.iostreams_zstd:
-            self.requires("zstd/[>=1.5]")
+            self.requires("zstd/[>=1.5.7]")
         if self.options.locale_icu:
-            self.requires("icu/74.2")
+            self.requires("icu/[>=77.1]")
         if self.options.locale_iconv:
-            self.requires("libiconv/1.17")
+            self.requires("libiconv/[>=1.18]")
         if self.options.stacktrace_backtrace:
-            self.requires("libbacktrace/cci.20210118", transitive_headers=True, transitive_libs=True)
+            self.requires("libbacktrace/cci.20240730", transitive_headers=True, transitive_libs=True)
 
     def package_id(self):
         del self.info.options.filesystem_version
         del self.info.options.system_use_utf8
 
     def source(self):
-        get(self, **self.conan_data["sources"][self.version],
-           destination=self.source_folder, strip_root=True)
+        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
         apply_conandata_patches(self)
 
     @property
@@ -502,16 +504,31 @@ class BoostConan(ConanFile):
             if not self.options.with_python:
                 flags["Python_ROOT_DIR"] = os.path.dirname(self._python_executable)
 
+
         include_libraries = ""
         for libname in self._available_libraries:
             if getattr(self.options, f"with_{libname}"):
+                if libname.startswith("numeric"):
+                    libname.replace("_", "/")
                 include_libraries += f"{libname};"
 
-        if include_libraries and include_libraries[-1] == ";":
-            include_libraries = include_libraries[:-1]
-        
         if include_libraries:
+            if include_libraries[-1] == ";":
+                include_libraries = include_libraries[:-1]
             flags["BOOST_INCLUDE_LIBRARIES"] = include_libraries
+
+
+        exclude_libraries = ""
+        for libname in self._available_libraries:
+            if getattr(self.options, f"without_{libname}"):
+                if libname.startswith("numeric"):
+                    libname.replace("_", "/")
+                exclude_libraries += f"{libname};"
+
+        if exclude_libraries:
+            if exclude_libraries[-1] == ";":
+                exclude_libraries = exclude_libraries[:-1]
+            flags["BOOST_EXCLUDE_LIBRARIES"] = exclude_libraries
 
         return flags
 
@@ -533,7 +550,7 @@ class BoostConan(ConanFile):
     def package(self):
         cmake = CMake(self)
         cmake.install()
-        copy(self, "LICENSE_1_0.txt", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
+        copy(self, "LICENSE*", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
         self.cpp_info.builddirs = [""]

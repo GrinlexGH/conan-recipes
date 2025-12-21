@@ -1,20 +1,22 @@
 import os
+
 from conan import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
-from conan.tools.files import copy, get
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
 
 required_conan_version = ">=2.20"
 
 
 class SDLConan(ConanFile):
     name = "sdl"
-    description = "A cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware"
-    homepage = "https://www.libsdl.org"
-    license = "Zlib"
-    topics = ("sdl3", "audio", "keyboard", "graphics", "opengl")
-
     package_type = "library"
     implements = ["auto_shared_fpic"]
+
+    license = "Zlib"
+    author = "libsdl-org"
+    description = "A cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware"
+    homepage = "https://www.libsdl.org"
+    topics = ("sdl3", "audio", "keyboard", "graphics", "opengl")
 
     settings = "os", "arch", "compiler", "build_type"
 
@@ -28,13 +30,19 @@ class SDLConan(ConanFile):
         "fPIC": True,
     }
 
+    def export_sources(self):
+        export_conandata_patches(self)
+
+    def source(self):
+        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
+        apply_conandata_patches(self)
+
     def layout(self):
         cmake_layout(self, src_folder="src")
 
-    def source(self):
-        get(self, **self.conan_data["sources"][self.version], strip_root=True)
-
     def generate(self):
+        deps = CMakeDeps(self)
+        deps.generate()
         tc = CMakeToolchain(self)
         tc.generate()
 
@@ -44,9 +52,9 @@ class SDLConan(ConanFile):
         cmake.build()
 
     def package(self):
-        copy(self, "LICENSE.txt", self.source_folder, os.path.join(self.package_folder, "licenses"))
         cmake = CMake(self)
         cmake.install()
+        copy(self, "LICENSE*", self.source_folder, os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
         self.cpp_info.builddirs = [""]

@@ -1,4 +1,5 @@
 import os
+
 from conan import ConanFile
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, copy, collect_libs
 from conan.tools.scm import Git
@@ -8,11 +9,12 @@ required_conan_version = ">=2.20"
 
 class SteamworksSDKRecipe(ConanFile):
     name = "steamworks_sdk"
+    package_type = "shared-library"
+
+    author = "Valve Corporation"
     description = "Steamworks SDK"
     homepage = "https://partner.steamgames.com/doc/sdk"
     topics = ("Steamworks", "Steam", "SteamworksSDK")
-
-    package_type = "shared-library"
 
     settings = "os", "compiler", "build_type", "arch"
     no_copy_source = True

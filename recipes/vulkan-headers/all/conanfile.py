@@ -1,35 +1,40 @@
 import os
+
 from conan import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
-from conan.tools.files import copy, get, apply_conandata_patches, export_conandata_patches
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
 
 required_conan_version = ">=2.20"
 
 
 class VulkanHeadersConan(ConanFile):
     name = "vulkan-headers"
+
+    license = "Apache-2.0"
+    author = "KhronosGroup"
     description = "Vulkan Header files."
     homepage = "https://github.com/KhronosGroup/Vulkan-Headers"
-    license = "Apache-2.0"
     topics = ("vulkan-headers", "vulkan")
 
     settings = "os", "arch", "compiler", "build_type"
-
-    def layout(self):
-        cmake_layout(self, src_folder="src")
 
     def export_sources(self):
         export_conandata_patches(self)
 
     def source(self):
-        get(self, **self.conan_data["sources"][self.version], strip_root=True)
+        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
+        apply_conandata_patches(self)
+
+    def layout(self):
+        cmake_layout(self, src_folder="src")
 
     def generate(self):
+        deps = CMakeDeps(self)
+        deps.generate()
         tc = CMakeToolchain(self)
         tc.generate()
 
     def build(self):
-        apply_conandata_patches(self)
         cmake = CMake(self)
         cmake.configure()
 

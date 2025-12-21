@@ -1,16 +1,20 @@
+import os
+
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
-from conan.tools.files import apply_conandata_patches, export_conandata_patches, get
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, copy
 from conan.tools.scm import Git
 
 required_conan_version = ">=2.20"
 
 
-class vulkan_memory_allocator_hppRecipe(ConanFile):
+class VulkanMemoryAllocatorHppRecipe(ConanFile):
     name = "vulkan-memory-allocator-hpp"
+
+    license = "CC0 1.0 Universal"
+    author = "YaaZ"
     description = "C++ bindings for VulkanMemoryAllocator"
     homepage = "https://github.com/YaaZ/VulkanMemoryAllocator-Hpp"
-    license = "CC0 1.0 Universal"
     topics = ("VulkanMemoryAllocator-Hpp", "Vulkan", "Header Only")
 
     settings = "os", "compiler", "build_type", "arch"
@@ -19,16 +23,12 @@ class vulkan_memory_allocator_hppRecipe(ConanFile):
         export_conandata_patches(self)
 
     def requirements(self):
-        self.requires("vulkan-headers/[>=1.4.336]")
+        self.requires("vulkan-headers/[>=1.4.337]")
 
     def source(self):
         src_data = self.conan_data["sources"][self.version]
-        if "commit" in src_data:
-            git = Git(self)
-            git.clone(url=src_data["url"], args=["--recursive"], target=self.source_folder)
-            git.checkout(src_data["commit"])
-        else:
-            get(self, **self.conan_data["sources"][self.version], strip_root=True)
+        git = Git(self)
+        git.clone(url="https://github.com/YaaZ/VulkanMemoryAllocator-Hpp.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
         apply_conandata_patches(self)
 
     def layout(self):
@@ -53,6 +53,7 @@ class vulkan_memory_allocator_hppRecipe(ConanFile):
     def package(self):
         cmake = CMake(self)
         cmake.install()
+        copy(self, "LICENSE*", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
         self.cpp_info.builddirs = [""]

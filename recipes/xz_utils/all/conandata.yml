@@ -1,0 +1,4 @@
+sources:
+  "5.8.2":
+    url: "https://github.com/tukaani-project/xz/archive/refs/tags/v5.8.2.tar.gz"
+    sha256: "f21fdf2c1ee004de30ca40377a273e3369186e6b7ab7b50a410eaa2e2bbefafb"

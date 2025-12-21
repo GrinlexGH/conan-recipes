@@ -7,7 +7,7 @@ from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout
 from conan.tools.files import chdir
 
 
-class TestPackageConan(ConanFile):
+class boostTestConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     generators = "CMakeDeps", "VirtualBuildEnv", "VirtualRunEnv"
     test_type = "explicit"

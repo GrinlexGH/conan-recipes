@@ -1,20 +1,22 @@
 import os
+
 from conan import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
-from conan.tools.files import copy, get
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
 
 required_conan_version = ">=2.20"
 
 
 class FmtConan(ConanFile):
     name = "fmt"
-    description = "A safe and fast alternative to printf and IOStreams."
-    homepage = "https://github.com/fmtlib/fmt"
-    license = "MIT"
-    topics = ("format", "iostream", "printf")
-
     package_type = "library"
     implements = ["auto_shared_fpic"]
+
+    license = "MIT"
+    author = "vitaut"
+    description = "A safe and fast alternative to printf and IOStreams."
+    homepage = "https://github.com/fmtlib/fmt"
+    topics = ("format", "iostream", "printf")
 
     settings = "os", "arch", "compiler", "build_type"
 
@@ -30,13 +32,19 @@ class FmtConan(ConanFile):
         "use_modules": False,
     }
 
+    def export_sources(self):
+        export_conandata_patches(self)
+
+    def source(self):
+        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
+        apply_conandata_patches(self)
+
     def layout(self):
         cmake_layout(self, src_folder="src")
 
-    def source(self):
-        get(self, **self.conan_data["sources"][self.version], strip_root=True)
-
     def generate(self):
+        deps = CMakeDeps(self)
+        deps.generate()
         tc = CMakeToolchain(self)
         tc.variables["FMT_DOC"] = "OFF"
         tc.variables["FMT_INSTALL"] = "ON"

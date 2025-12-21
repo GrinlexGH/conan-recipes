@@ -1,10 +1,13 @@
 sources:
-  "1.4.335":
-    url: "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.4.335.tar.gz"
-    sha256: "8ee39bee575bdccc1ecacd0bdb26f181841de35d7409a3eca468c6b622daa2f1"
+  "1.4.337":
+    url: "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.4.337.tar.gz"
+    sha256: "13845b9dc873758cdc1f2be6219f7fc99afea0a2c80586043b5bb435b99e590b"
   "1.4.336":
     url: "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.4.336.tar.gz"
     sha256: "ab07d2119c8f09765ba704463dcb14238e1ccd4083b3afc6a29a463fa1cd0923"
+  "1.4.335":
+    url: "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.4.335.tar.gz"
+    sha256: "8ee39bee575bdccc1ecacd0bdb26f181841de35d7409a3eca468c6b622daa2f1"
 patches:
   "1.4.335":
     - patch_file: "patches/1.4.335/0001-module-name-fix.patch"

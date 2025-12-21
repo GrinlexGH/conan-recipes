@@ -1,7 +1,8 @@
 import os
+
 from conan import ConanFile
-from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout
-from conan.tools.files import apply_conandata_patches, get, export_conandata_patches, load, replace_in_file, rmdir
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, load, replace_in_file
 from conan.tools.scm import Version
 
 required_conan_version = ">=2.20"
@@ -42,6 +43,8 @@ class TinyObjLoaderConan(ConanFile):
             destination=self.source_folder, strip_root=True)
 
     def generate(self):
+        deps = CMakeDeps(self)
+        deps.generate()
         tc = CMakeToolchain(self)
         tc.variables["TINYOBJLOADER_USE_DOUBLE"] = self.options.double
         tc.variables["TINYOBJLOADER_BUILD_TEST_LOADER"] = False

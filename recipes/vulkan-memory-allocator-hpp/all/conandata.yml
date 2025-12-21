@@ -1,4 +1,3 @@
 sources:
   "3.3.0":
-    url: "https://github.com/YaaZ/VulkanMemoryAllocator-Hpp/releases/download/v3.3.0%2B1/VulkanMemoryAllocator-Hpp-3.3.0.tar.gz"
-    sha256: "8eab33e9d4a088470d2391667b48df693a6398bb76ccea20f3d4275ad85fab8a"
+    tag: "v3.3.0+2"
