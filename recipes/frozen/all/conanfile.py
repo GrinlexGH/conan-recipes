@@ -3,6 +3,7 @@ import os
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
+from conan.tools.scm import Git
 
 required_conan_version = ">=2.20"
 
@@ -22,7 +23,10 @@ class FrozenRecipe(ConanFile):
         export_conandata_patches(self)
 
     def source(self):
-        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
+        src_data = self.conan_data["sources"][self.version]
+        git = Git(self)
+        git.clone(url="https://github.com/serge-sans-paille/frozen.git", target=self.source_folder)
+        git.checkout(src_data["commit"])
         apply_conandata_patches(self)
 
     def layout(self):

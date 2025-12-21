@@ -30,7 +30,7 @@ class STCRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url=src_data["url"], target=self.source_folder)
+        git.clone(url="https://github.com/GrinlexGH/simple_term_colors.git", target=self.source_folder)
         git.checkout(src_data["commit"])
         apply_conandata_patches(self)
 
