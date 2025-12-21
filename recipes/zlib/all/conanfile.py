@@ -20,7 +20,6 @@ class ZlibRecipe(ConanFile):
     topics = ("zlib", "compression")
 
     settings = "os", "arch", "compiler", "build_type"
-
     options = { "shared": [True, False], "fPIC": [True, False], }
     default_options = { "shared": False, "fPIC": True, }
 
@@ -80,9 +79,9 @@ class ZlibRecipe(ConanFile):
         return license_contents
 
     def package(self):
-        save(self, os.path.join(self.package_folder, "licenses", "LICENSE"), self._extract_license())
         cmake = CMake(self)
         cmake.install()
+        save(self, os.path.join(self.package_folder, "licenses", "LICENSE"), self._extract_license())
 
     def package_info(self):
         self.cpp_info.set_property("cmake_find_mode", "both")

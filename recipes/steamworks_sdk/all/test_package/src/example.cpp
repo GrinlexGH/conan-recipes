@@ -7,7 +7,7 @@ int main() {
 
     ISteamUser* steamUser = SteamUser();
     if (steamUser) {
-        SteamAPICall_t call = steamUser->GetEncryptedAppTicket(nullptr, 0, nullptr); 
+        SteamAPICall_t call = steamUser->GetEncryptedAppTicket(nullptr, 0, nullptr);
         std::cout << "GetEncryptedAppTicket returned " << call << std::endl;
         SteamAPI_Shutdown();
         return 0;
