@@ -32,6 +32,8 @@ class FrozenRecipe(ConanFile):
         deps = CMakeDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
+        tc.variables["frozen.installation"] = "ON"
+        tc.variables["frozen.tests"] = "OFF"
         tc.generate()
 
     def build(self):
