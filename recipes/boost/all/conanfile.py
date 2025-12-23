@@ -1,13 +1,12 @@
 import os
 import sys
 from io import StringIO
-import yaml
 
+import yaml
 from conan import ConanFile
 from conan.errors import ConanException, ConanInvalidConfiguration
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
-from conan.tools.microsoft import is_msvc, is_msvc_static_runtime
 
 required_conan_version = ">=2.20"
 
@@ -172,15 +171,12 @@ CONFIGURE_OPTIONS = (
 )
 
 
-class BoostConan(ConanFile):
+class BoostRecipe(ConanFile):
     name = "boost"
-    description = "Boost provides free peer-reviewed portable C++ source libraries"
-    homepage = "https://www.boost.org"
-    license = "BSL-1.0"
-    topics = ("libraries", "cpp")
-
     package_type = "library"
     implements = ["auto_shared_fpic"]
+
+    license = "BSL-1.0"
 
     settings = "os", "arch", "compiler", "build_type"
 
@@ -276,15 +272,9 @@ class BoostConan(ConanFile):
     default_options.update({f"with_{_name}": None for _name in CONFIGURE_OPTIONS})
     default_options.update({f"without_{_name}": None for _name in CONFIGURE_OPTIONS})
 
-    short_paths = True
     no_copy_source = True
+
     _cached_dependencies = None
-
-    def export(self):
-        copy(self, f"dependencies/{self._dependency_filename}", src=self.recipe_folder, dst=self.export_folder)
-
-    def export_sources(self):
-        export_conandata_patches(self)
 
     @property
     def _dependency_filename(self):
@@ -300,52 +290,16 @@ class BoostConan(ConanFile):
                 self._cached_dependencies = yaml.safe_load(f)
         return self._cached_dependencies
 
-    def _all_dependent_modules(self, name):
-        dependencies = {name}
-        while True:
-            new_dependencies = set()
-            for dependency in dependencies:
-                new_dependencies.update(set(self._dependencies["dependencies"][dependency]))
-                new_dependencies.update(dependencies)
-            if len(new_dependencies) > len(dependencies):
-                dependencies = new_dependencies
-            else:
-                break
-        return dependencies
-
     @property
     def _available_libraries(self):
         return self._dependencies["libraries"]
 
-    def config_options(self):
-        if self.settings.os == "Windows":
-            del self.options.fPIC
-
-        # Test whether all config_options from the yml are available in CONFIGURE_OPTIONS
-        for opt_name in self._available_libraries:
-            if (f"with_{opt_name}" not in self.options) or (f"without_{opt_name}" not in self.options):
-                raise ConanException(f"{self._dependency_filename} has the configure options {opt_name} which is not available in conanfile.py")
-
-        # Remove options not supported by this version of boost
-        for dep_name in CONFIGURE_OPTIONS:
-            if dep_name not in self._available_libraries:
-                delattr(self.options, f"with_{dep_name}")
-
     @property
     def _python_executable(self):
-        """
-        obtain full path to the python interpreter executable
-        :return: path to the python interpreter executable, either set by option, or system default
-        """
         exe = self.options.python_executable if self.options.python_executable else sys.executable
         return str(exe).replace("\\", "/")
 
     def _run_python_script(self, script):
-        """
-        execute python one-liner script and return its output
-        :param script: string containing python script to be executed
-        :return: output of the python script execution, or None, if script has failed
-        """
         output = StringIO()
         command = f'"{self._python_executable}" -c "{script}"'
         try:
@@ -354,39 +308,13 @@ class BoostConan(ConanFile):
             self.output.info("(failed)")
             return None
         output = output.getvalue()
-        # Conan is broken when run_to_output = True
-        if "\n-----------------\n" in output:
-            output = output.split("\n-----------------\n", 1)[1]
         output = output.strip()
         return output if output != "None" else None
 
     def _detect_python_version(self):
-        """
-        obtain version of python interpreter
-        :return: python interpreter version, in format major.minor
-        """
         return self._run_python_script("from __future__ import print_function; "
                                        "import sys; "
                                        "print('{}.{}'.format(sys.version_info[0], sys.version_info[1]))")
-
-    def configure(self):
-        if self.options.shared:
-            self.options.rm_safe("fPIC")
-
-        if self.options.with_python:
-            if not self.options.python_version:
-                self.options.python_version = self._detect_python_version()
-            else:
-                version = self._detect_python_version()
-                if version != self.options.python_version:
-                    raise ConanInvalidConfiguration(f"detected python version {version} doesn't match conan option {self.options.python_version}")
-
-    def layout(self):
-        cmake_layout(self, src_folder="src")
-
-    def validate(self):
-        if is_msvc(self) and self.options.shared and is_msvc_static_runtime(self):
-            raise ConanInvalidConfiguration("Boost can not be built as shared library with MT runtime.")
 
     def requirements(self):
         if self.options.iostreams_zlib:
@@ -404,13 +332,42 @@ class BoostConan(ConanFile):
         if self.options.stacktrace_backtrace:
             self.requires("libbacktrace/cci.20240730", transitive_headers=True, transitive_libs=True)
 
-    def package_id(self):
-        del self.info.options.filesystem_version
-        del self.info.options.system_use_utf8
+    def export(self):
+        copy(self, f"dependencies/{self._dependency_filename}", src=self.recipe_folder, dst=self.export_folder)
+
+    def export_sources(self):
+        export_conandata_patches(self)
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
         apply_conandata_patches(self)
+
+    def layout(self):
+        cmake_layout(self, src_folder="src")
+
+    def config_options(self):
+        # Test whether all config_options from the yml are available in CONFIGURE_OPTIONS
+        for opt_name in self._available_libraries:
+            if (f"with_{opt_name}" not in self.options) or (f"without_{opt_name}" not in self.options):
+                raise ConanException(f"{self._dependency_filename} has the configure options {opt_name} which is not available in conanfile.py")
+
+        # Remove options not supported by this version of boost
+        for dep_name in CONFIGURE_OPTIONS:
+            if dep_name not in self._available_libraries:
+                delattr(self.options, f"with_{dep_name}")
+
+    def configure(self):
+        if self.options.with_python:
+            if not self.options.python_version:
+                self.options.python_version = self._detect_python_version()
+            else:
+                version = self._detect_python_version()
+                if version != self.options.python_version:
+                    raise ConanInvalidConfiguration(f"detected python version {version} doesn't match conan option {self.options.python_version}")
+
+    def package_id(self):
+        del self.info.options.filesystem_version
+        del self.info.options.system_use_utf8
 
     @property
     def _build_definitions(self):
@@ -504,7 +461,6 @@ class BoostConan(ConanFile):
             if not self.options.with_python:
                 flags["Python_ROOT_DIR"] = os.path.dirname(self._python_executable)
 
-
         include_libraries = ""
         for libname in self._available_libraries:
             if getattr(self.options, f"with_{libname}"):
@@ -516,7 +472,6 @@ class BoostConan(ConanFile):
             if include_libraries[-1] == ";":
                 include_libraries = include_libraries[:-1]
             flags["BOOST_INCLUDE_LIBRARIES"] = include_libraries
-
 
         exclude_libraries = ""
         for libname in self._available_libraries:

@@ -12,10 +12,6 @@ class VulkanMemoryAllocatorHppRecipe(ConanFile):
     name = "vulkan-memory-allocator-hpp"
 
     license = "CC0 1.0 Universal"
-    author = "YaaZ"
-    description = "C++ bindings for VulkanMemoryAllocator"
-    homepage = "https://github.com/YaaZ/VulkanMemoryAllocator-Hpp"
-    topics = ("VulkanMemoryAllocator-Hpp", "Vulkan", "Header Only")
 
     settings = "os", "compiler", "build_type", "arch"
 

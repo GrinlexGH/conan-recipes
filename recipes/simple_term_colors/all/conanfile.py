@@ -6,16 +6,12 @@ from conan.tools.scm import Git
 required_conan_version = ">=2.20"
 
 
-class STCRecipe(ConanFile):
+class SimpleTermColorsRecipe(ConanFile):
     name = "simple_term_colors"
     package_type = "header-library"
     implements = ["auto_header_only"]
 
     license = "MIT"
-    author = "illyigan"
-    description = "C++17 header-only library for manipulating terminal output colors using ANSI escape sequences."
-    homepage = "https://github.com/GrinlexGH/simple_term_colors"
-    topics = ("simple_term_colors", "Header Only", "Colors", "Terminal")
 
     settings = "os", "compiler", "build_type", "arch"
     no_copy_source = True

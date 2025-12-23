@@ -14,14 +14,18 @@ class ZlibRecipe(ConanFile):
     implements = ["auto_shared_fpic"]
 
     license = "Zlib"
-    author = "madler"
-    description = "A massively spiffy yet delicately unobtrusive compression library."
-    homepage = "https://zlib.net"
-    topics = ("zlib", "compression")
 
     settings = "os", "arch", "compiler", "build_type"
-    options = { "shared": [True, False], "fPIC": [True, False], }
-    default_options = { "shared": False, "fPIC": True, }
+
+    options = {
+        "shared": [True, False],
+        "fPIC": [True, False],
+    }
+
+    default_options = {
+        "shared": False,
+        "fPIC": True,
+    }
 
     def export_sources(self):
         export_conandata_patches(self)

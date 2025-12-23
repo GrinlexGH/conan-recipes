@@ -7,16 +7,12 @@ from conan.tools.files import apply_conandata_patches, export_conandata_patches,
 required_conan_version = ">=2.20"
 
 
-class SDLConan(ConanFile):
+class SDLRecipe(ConanFile):
     name = "sdl"
     package_type = "library"
     implements = ["auto_shared_fpic"]
 
     license = "Zlib"
-    author = "libsdl-org"
-    description = "A cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware"
-    homepage = "https://www.libsdl.org"
-    topics = ("sdl3", "audio", "keyboard", "graphics", "opengl")
 
     settings = "os", "arch", "compiler", "build_type"
 

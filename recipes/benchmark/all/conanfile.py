@@ -7,20 +7,25 @@ from conan.tools.files import apply_conandata_patches, export_conandata_patches,
 required_conan_version = ">=2.20"
 
 
-class BenchmarkConan(ConanFile):
+class BenchmarkRecipe(ConanFile):
     name = "benchmark"
     package_type = "library"
     implements = ["auto_shared_fpic"]
 
-    license = "Apache License"
-    author = "Google"
-    description = "A microbenchmark support library"
-    homepage = "https://github.com/google/benchmark"
-    topics = ("benchmark", "google")
+    license = "Apache-2.0"
+    description = "Google benchmark"
 
     settings = "os", "arch", "compiler", "build_type"
-    options = { "shared": [True, False], "fPIC": [True, False], }
-    default_options = { "shared": False, "fPIC": True, }
+
+    options = {
+        "shared": [True, False],
+        "fPIC": [True, False],
+    }
+
+    default_options = {
+        "shared": False,
+        "fPIC": True,
+    }
 
     def export_sources(self):
         export_conandata_patches(self)

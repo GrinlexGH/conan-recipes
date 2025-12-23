@@ -7,16 +7,12 @@ from conan.tools.files import apply_conandata_patches, export_conandata_patches,
 required_conan_version = ">=2.20"
 
 
-class FmtConan(ConanFile):
+class fmtRecipe(ConanFile):
     name = "fmt"
     package_type = "library"
     implements = ["auto_shared_fpic"]
 
     license = "MIT"
-    author = "vitaut"
-    description = "A safe and fast alternative to printf and IOStreams."
-    homepage = "https://github.com/fmtlib/fmt"
-    topics = ("format", "iostream", "printf")
 
     settings = "os", "arch", "compiler", "build_type"
 

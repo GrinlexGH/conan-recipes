@@ -11,12 +11,10 @@ class SteamworksSDKRecipe(ConanFile):
     name = "steamworks_sdk"
     package_type = "shared-library"
 
-    author = "Valve Corporation"
-    description = "Steamworks SDK"
-    homepage = "https://partner.steamgames.com/doc/sdk"
-    topics = ("Steamworks", "Steam", "SteamworksSDK")
+    license = "STEAMWORKS SDK license"
 
     settings = "os", "compiler", "build_type", "arch"
+
     no_copy_source = True
 
     def export_sources(self):
@@ -25,7 +23,7 @@ class SteamworksSDKRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url=src_data["url"], target=self.source_folder)
+        git.clone(url="https://github.com/rlabrecque/SteamworksSDK.git", target=self.source_folder)
         git.checkout(src_data["commit"])
         apply_conandata_patches(self)
 

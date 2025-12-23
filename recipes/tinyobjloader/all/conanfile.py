@@ -3,20 +3,16 @@ import os
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, load, replace_in_file
-from conan.tools.scm import Version
 
 required_conan_version = ">=2.20"
 
 
-class TinyObjLoaderConan(ConanFile):
+class tinyobjloaderRecipe(ConanFile):
     name = "tinyobjloader"
-    description = "Tiny but powerful single file wavefront obj loader"
-    homepage = "https://github.com/syoyo/tinyobjloader"
-    license = "MIT"
-    topics = ("loader", "obj", "3d", "wavefront", "geometry")
-
     package_type = "library"
     implements = ["auto_shared_fpic"]
+
+    license = "MIT"
 
     settings = "os", "arch", "build_type", "compiler"
 
@@ -39,8 +35,7 @@ class TinyObjLoaderConan(ConanFile):
         cmake_layout(self, src_folder="src")
 
     def source(self):
-        get(self, **self.conan_data["sources"][self.version],
-            destination=self.source_folder, strip_root=True)
+        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
 
     def generate(self):
         deps = CMakeDeps(self)
@@ -48,12 +43,8 @@ class TinyObjLoaderConan(ConanFile):
         tc = CMakeToolchain(self)
         tc.variables["TINYOBJLOADER_USE_DOUBLE"] = self.options.double
         tc.variables["TINYOBJLOADER_BUILD_TEST_LOADER"] = False
-        if Version(self.version) < "1.0.7":
-            tc.variables["TINYOBJLOADER_COMPILATION_SHARED"] = self.options.shared
         tc.variables["TINYOBJLOADER_BUILD_OBJ_STICHER"] = False
         tc.variables["CMAKE_INSTALL_DOCDIR"] = "licenses"
-        if Version(self.version).major < 2:
-            tc.variables["CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS"] = True
         tc.generate()
 
     def build(self):

@@ -7,16 +7,12 @@ from conan.tools.files import apply_conandata_patches, export_conandata_patches,
 required_conan_version = ">=2.20"
 
 
-class SDLImageConan(ConanFile):
+class SDLImageRecipe(ConanFile):
     name = "sdl_image"
     package_type = "library"
     implements = ["auto_shared_fpic"]
 
     license = "MIT"
-    author = "libsdl-org"
-    description = "SDL_image is an image file loading library"
-    homepage = "https://github.com/libsdl-org/SDL_image"
-    topics = ("sdl2", "sdl", "images", "opengl")
 
     settings = "os", "arch", "compiler", "build_type"
 

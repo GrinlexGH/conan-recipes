@@ -7,22 +7,24 @@ from conan.tools.files import apply_conandata_patches, export_conandata_patches,
 required_conan_version = ">=2.20"
 
 
-class xz_utilsRecipe(ConanFile):
+class XZUtilsRecipe(ConanFile):
     name = "xz_utils"
+    package_type = "library"
+    implements = ["auto_shared_fpic"]
 
     license = "Unlicense", "LGPL-2.1-or-later", "GPL-2.0-or-later", "GPL-3.0-or-later"
-    author = "tukaani"
-    description = (
-        "XZ Utils is free general-purpose data compression software with a high "
-        "compression ratio. XZ Utils were written for POSIX-like systems, but also "
-        "work on some not-so-POSIX systems. XZ Utils are the successor to LZMA Utils."
-    )
-    homepage = "https://tukaani.org/xz/"
-    topics = ("lzma", "xz", "compression")
 
     settings = "os", "compiler", "build_type", "arch"
-    options = { "shared": [True, False], "fPIC": [True, False] }
-    default_options = { "shared": False, "fPIC": True }
+
+    options = {
+        "shared": [True, False],
+        "fPIC": [True, False]
+    }
+
+    default_options = {
+        "shared": False,
+        "fPIC": True
+    }
 
     def export_sources(self):
         export_conandata_patches(self)

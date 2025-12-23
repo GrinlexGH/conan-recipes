@@ -12,10 +12,7 @@ class FrozenRecipe(ConanFile):
     name = "frozen"
 
     license = "Apache-2.0"
-    author = "serge-sans-paille"
     description = "A header-only, constexpr alternative to gperf for C++14 users."
-    homepage = "https://github.com/serge-sans-paille/frozen"
-    topics = ("gperf", "constexpr", "Header Only")
 
     settings = "os", "compiler", "build_type", "arch"
 

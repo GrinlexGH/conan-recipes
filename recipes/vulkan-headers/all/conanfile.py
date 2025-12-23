@@ -7,14 +7,10 @@ from conan.tools.files import apply_conandata_patches, export_conandata_patches,
 required_conan_version = ">=2.20"
 
 
-class VulkanHeadersConan(ConanFile):
+class VulkanHeadersRecipe(ConanFile):
     name = "vulkan-headers"
 
     license = "Apache-2.0"
-    author = "KhronosGroup"
-    description = "Vulkan Header files."
-    homepage = "https://github.com/KhronosGroup/Vulkan-Headers"
-    topics = ("vulkan-headers", "vulkan")
 
     settings = "os", "arch", "compiler", "build_type"
 
