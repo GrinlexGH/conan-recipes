@@ -40,10 +40,10 @@ def detect_vulkan_sdk_version(sdk_path: str) -> str:
 
     return f"{variant}.{major}.{minor}.{patch}"
 
-class VulkanMemoryAllocatorHppRecipe(ConanFile):
-    name = "vulkan-memory-allocator-hpp"
+class VolkRecipe(ConanFile):
+    name = "volk"
 
-    license = "CC0 1.0 Universal"
+    license = "MIT"
 
     settings = "os", "compiler", "build_type", "arch"
 
@@ -72,7 +72,7 @@ class VulkanMemoryAllocatorHppRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url="https://github.com/YaaZ/VulkanMemoryAllocator-Hpp.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
+        git.clone(url="https://github.com/zeux/volk.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
         apply_conandata_patches(self)
 
     def layout(self):
@@ -80,17 +80,14 @@ class VulkanMemoryAllocatorHppRecipe(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
-        tc.cache_variables["VMA_HPP_GENERATOR_BUILD"] = False
-        tc.cache_variables["VMA_HPP_RUN_GENERATOR"] = False
-        tc.cache_variables["VMA_HPP_SAMPLES_BUILD"] = False
-        tc.cache_variables["VMA_HPP_VULKAN_REVISION"] = "system"
-        tc.cache_variables["VMA_HPP_ENABLE_INSTALL"] = True
-        tc.cache_variables["VMA_ENABLE_INSTALL"] = True
+        tc.variables["VOLK_PULL_IN_VULKAN"] = True
+        tc.variables["VOLK_INSTALL"] = True
         tc.generate()
 
     def build(self):
         cmake = CMake(self)
         cmake.configure()
+        cmake.build()
 
     def package(self):
         cmake = CMake(self)
