@@ -61,7 +61,6 @@ class SDLImageRecipe(ConanFile):
         deps.generate()
         tc = CMakeToolchain(self)
         tc.cache_variables["SDLIMAGE_VENDORED"] = True
-        tc.cache_variables["SDLIMAGE_DEPS_SHARED"] = False
         tc.cache_variables["SDLIMAGE_SAMPLES"] = False
         tc.cache_variables["SDLIMAGE_STRICT"] = True
         tc.cache_variables["SDLIMAGE_AVIF"] = self.options.with_avif
