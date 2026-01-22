@@ -2,7 +2,8 @@ import os
 
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
-from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, copy
+from conan.tools.scm import Git
 
 required_conan_version = ">=2.20"
 
@@ -38,15 +39,19 @@ class SDLImageRecipe(ConanFile):
         "with_jxl": False,
     }
 
+    no_copy_source = True
+
     def export_sources(self):
         export_conandata_patches(self)
 
     def source(self):
-        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
+        src_data = self.conan_data["sources"][self.version]
+        git = Git(self)
+        git.clone(url="https://github.com/libsdl-org/SDL_image.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
         apply_conandata_patches(self)
 
     def requirements(self):
-        self.requires("sdl/[>=3.2.20]")
+        self.requires(f"sdl/[>={self.version}]")
 
     def layout(self):
         cmake_layout(self, src_folder="src")
