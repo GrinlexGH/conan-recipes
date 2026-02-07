@@ -10,7 +10,7 @@ required_conan_version = ">=2.20"
 
 def detect_vulkan_sdk_version(sdk_path: str) -> str:
     import re
-    header = os.path.join(sdk_path, "Include", "vulkan", "vulkan_core.h")
+    header = os.path.join(sdk_path, "include", "vulkan", "vulkan_core.h")
     if not os.path.exists(header):
         raise ConanInvalidConfiguration("vulkan_core.h not found in Vulkan SDK")
 
