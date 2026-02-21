@@ -29,7 +29,7 @@ class SDLImageRecipe(ConanFile):
     }
 
     default_options = {
-        "shared": False,
+        "shared": True,
         "fPIC": True,
         "with_libjpeg": True,
         "with_libtiff": True,

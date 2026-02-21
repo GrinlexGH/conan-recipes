@@ -23,7 +23,7 @@ class SDLRecipe(ConanFile):
     }
 
     default_options = {
-        "shared": False,
+        "shared": True,
         "fPIC": True,
     }
 
