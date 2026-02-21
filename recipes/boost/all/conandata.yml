@@ -6,3 +6,5 @@ patches:
   "1.90.0":
     - patch_file: "patches/0001-mingw-cobalt-link-cmake.patch"
       patch_type: conan
+    - patch_file: "patches/0002-iostreams-zstd-target-name.patch"
+      patch_type: conan
