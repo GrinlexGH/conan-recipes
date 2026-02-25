@@ -72,7 +72,7 @@ class SteamworksSDKRecipe(ConanFile):
             elif self.settings.arch == "x86":
                 self.cpp_info.bindirs.append("bin")
                 self.cpp_info.libdirs.append("lib")
-                self.cpp_info.bibdirs.append(os.path.join("bin", "win32"))
+                self.cpp_info.bindirs.append(os.path.join("bin", "win32"))
                 self.cpp_info.libdirs.append(os.path.join("lib", "win32"))
 
         elif self.settings.os == "Linux":
