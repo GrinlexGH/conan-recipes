@@ -184,6 +184,7 @@ class BoostRecipe(ConanFile):
         "shared": [True, False],
         "fPIC": [True, False],
 
+        "runtime": [None, "static", "shared"],
         "use_modules": [True, False],
 
         "python_version": [None, "ANY"],
@@ -230,6 +231,7 @@ class BoostRecipe(ConanFile):
         "shared": False,
         "fPIC": True,
 
+        "runtime": None,
         "use_modules": False,
 
         "python_version": None,
@@ -386,7 +388,8 @@ class BoostRecipe(ConanFile):
     def _build_flags(self):
         flags = {}
 
-        flags["BOOST_RUNTIME_LINK"] = 'shared' if self.options.shared else 'static'
+        if self.options.runtime != None:
+            flags["BOOST_RUNTIME_LINK"] = self.options.runtime
 
         if self.options.use_modules:
             flags["BOOST_USE_MODULES"] = 'ON'
