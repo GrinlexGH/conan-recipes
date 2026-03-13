@@ -34,7 +34,16 @@ class SDLRecipe(ConanFile):
         get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
         apply_conandata_patches(self)
 
-    def system_requirements(self):
+    def layout(self):
+        cmake_layout(self, src_folder="src")
+
+    def generate(self):
+        deps = CMakeDeps(self)
+        deps.generate()
+        tc = CMakeToolchain(self)
+        tc.generate()
+
+    def build_system_requirements_(self):
         if self.settings.os != "Linux":
             return
 
@@ -69,16 +78,9 @@ class SDLRecipe(ConanFile):
                 "vulkan-headers", "wayland", "wayland-protocols"]
         PacMan(self).install(pkgs)
 
-    def layout(self):
-        cmake_layout(self, src_folder="src")
-
-    def generate(self):
-        deps = CMakeDeps(self)
-        deps.generate()
-        tc = CMakeToolchain(self)
-        tc.generate()
-
     def build(self):
+        self.build_system_requirements_()
+
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
