@@ -7,8 +7,8 @@ from conan.tools.files import apply_conandata_patches, export_conandata_patches,
 required_conan_version = ">=2.20"
 
 
-class VolkRecipe(ConanFile):
-    name = "volk"
+class VkBootstrapRecipe(ConanFile):
+    name = "vk-bootstrap"
     package_type = "library"
     implements = ["auto_shared_fpic"]
 
@@ -18,22 +18,19 @@ class VolkRecipe(ConanFile):
 
     options = {
         "shared": [True, False],
-        "fPIC": [True, False],
-        "namespace": [True, False],
+        "fPIC": [True, False]
     }
 
     default_options = {
         "shared": True,
-        "fPIC": True,
-        "namespace": False,
+        "fPIC": True
     }
 
     def export_sources(self):
         export_conandata_patches(self)
 
     def requirements(self):
-        version = self.version.rsplit('.', 1)[0]
-        self.requires(f"vulkan-headers/[>={version}]")
+        self.requires(f"vulkan-headers/[>={self.version}]")
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
@@ -46,9 +43,8 @@ class VolkRecipe(ConanFile):
         deps = CMakeDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
-        tc.variables["VOLK_PULL_IN_VULKAN"] = True
-        tc.variables["VOLK_INSTALL"] = True
-        tc.variables["VOLK_NAMESPACE"] = self.options.namespace
+        tc.variables["VK_BOOTSTRAP_TEST"] = False
+        tc.variables["VK_BOOTSTRAP_INSTALL"] = True
         tc.generate()
 
     def build(self):

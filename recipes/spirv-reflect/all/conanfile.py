@@ -2,8 +2,7 @@ import os
 
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
-from conan.tools.files import apply_conandata_patches, export_conandata_patches, copy, save
-from conan.tools.scm import Git
+from conan.tools.files import copy, save
 from conan.errors import ConanInvalidConfiguration
 
 required_conan_version = ">=2.20"
@@ -39,6 +38,7 @@ def detect_vulkan_sdk_version(sdk_path: str) -> str:
         raise ConanInvalidConfiguration("Failed to detect VK_HEADER_VERSION_COMPLETE from vulkan_core.h")
 
     return f"{variant}.{major}.{minor}.{patch}"
+
 
 class SpirvReflectRecipe(ConanFile):
     name = "spirv-reflect"

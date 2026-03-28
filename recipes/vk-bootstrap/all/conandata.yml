@@ -1,0 +1,4 @@
+sources:
+  "1.4.347":
+    url: "https://github.com/charles-lunarg/vk-bootstrap/archive/refs/tags/v1.4.347.tar.gz"
+    sha256: "6c1eb4b629bc6b52d4745bc463c271d2c32e00eb72fc5716ee4f257248642094"
