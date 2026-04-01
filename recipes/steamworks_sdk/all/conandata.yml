@@ -1,4 +1,6 @@
 sources:
+  "1.64":
+    commit: "be6107f4b75bf996531415c53a6488a33a2a1be3"
   "1.63":
     commit: "494c2d680b9e47bbc369496b57568f44ef2f6796"
   "1.62":
