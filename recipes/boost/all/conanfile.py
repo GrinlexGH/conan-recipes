@@ -386,83 +386,71 @@ class BoostRecipe(ConanFile):
 
     @property
     def _build_flags(self):
+        bool_options = {
+            "use_modules": "BOOST_USE_MODULES",
+            "filesystem_use_std_fs": "BOOST_DLL_USE_STD_FS",
+            "system_use_utf8": "BOOST_SYSTEM_USE_UTF8",
+            "asio_no_deprecated": "BOOST_ASIO_NO_DEPRECATED",
+            "with_python": "BOOST_ENABLE_PYTHON",
+
+            # Iostreams
+            "iostreams_zlib": "BOOST_IOSTREAMS_ENABLE_ZLIB",
+            "iostreams_bzip2": "BOOST_IOSTREAMS_ENABLE_BZIP2",
+            "iostreams_lzma": "BOOST_IOSTREAMS_ENABLE_LZMA",
+            "iostreams_zstd": "BOOST_IOSTREAMS_ENABLE_ZSTD",
+
+            # Locale
+            "locale_icu": "BOOST_LOCALE_ENABLE_ICU",
+            "locale_iconv": "BOOST_LOCALE_ENABLE_ICONV",
+            "locale_posix": "BOOST_LOCALE_ENABLE_POSIX",
+            "locale_std": "BOOST_LOCALE_ENABLE_STD",
+            "locale_winapi": "BOOST_LOCALE_ENABLE_WINAPI",
+
+            # Stacktrace
+            "stacktrace_noop": "BOOST_STACKTRACE_ENABLE_NOOP",
+            "stacktrace_backtrace": "BOOST_STACKTRACE_ENABLE_BACKTRACE",
+            "stacktrace_addr2line": "BOOST_STACKTRACE_ENABLE_ADDR2LINE",
+            "stacktrace_basic": "BOOST_STACKTRACE_ENABLE_BASIC",
+            "stacktrace_windbg": "BOOST_STACKTRACE_ENABLE_WINDBG",
+            "stacktrace_windbg_cached": "BOOST_STACKTRACE_ENABLE_WINDBG_CACHED",
+            "stacktrace_from_exception": "BOOST_STACKTRACE_ENABLE_FROM_EXCEPTION",
+        }
+
+        string_options = {
+            "runtime": "BOOST_RUNTIME_LINK",
+            "layout": "BOOST_INSTALL_LAYOUT",
+            "visibility": "CMAKE_CXX_VISIBILITY_PRESET",
+            "context_binary_format": "BOOST_CONTEXT_BINARY_FORMAT",
+            "context_abi": "BOOST_CONTEXT_ABI",
+            "context_architecture": "BOOST_CONTEXT_ARCHITECTURE",
+            "context_assembler": "BOOST_CONTEXT_ASSEMBLER",
+            "context_asm_suffix": "BOOST_CONTEXT_ASM_SUFFIX",
+            "context_implementation": "BOOST_CONTEXT_IMPLEMENTATION",
+            "fiber_numa_target_os": "BOOST_FIBER_NUMA_TARGET_OS",
+            "thread_threadapi": "BOOST_THREAD_THREADAPI",
+        }
+
         flags = {}
 
-        if self.options.runtime != None:
-            flags["BOOST_RUNTIME_LINK"] = self.options.runtime
+        for opt_name, cmake_flag in bool_options.items():
+            value = self.options.get_safe(opt_name)
+            if value is not None and str(value) != "None":
+                flags[cmake_flag] = "ON" if value else "OFF"
 
-        if self.options.use_modules:
-            flags["BOOST_USE_MODULES"] = 'ON'
+        for opt_name, cmake_flag in string_options.items():
+            value = self.options.get_safe(opt_name)
+            if value is not None and str(value) != "None":
+                flags[cmake_flag] = value
 
-        if self.options.filesystem_use_std_fs != None:
-            flags["BOOST_DLL_USE_STD_FS"] = 'ON' if self.options.filesystem_use_std_fs else 'OFF'
+        visibility = self.options.get_safe("visibility")
+        if visibility:
+            flags["CMAKE_CXX_VISIBILITY_PRESET"] = visibility
+            flags["CMAKE_C_VISIBILITY_PRESET"] = visibility
+            flags["CMAKE_VISIBILITY_INLINES_HIDDEN"] = "ON" if visibility == "default" else "OFF"
 
-        if self.options.layout != None:
-            flags["BOOST_INSTALL_LAYOUT"] = self.options.layout
-
-        if self.options.visibility != None:
-            flags["CMAKE_CXX_VISIBILITY_PRESET"] = self.options.visibility
-            flags["CMAKE_C_VISIBILITY_PRESET"] = self.options.visibility
-            flags["CMAKE_VISIBILITY_INLINES_HIDDEN"] = "ON" if self.options.visibility == "default" else "OFF"
-
-        if self.options.context_binary_format != None:
-            flags["BOOST_CONTEXT_BINARY_FORMAT"] = self.options.context_binary_format
-        if self.options.context_abi != None:
-            flags["BOOST_CONTEXT_ABI"] = self.options.context_abi
-        if self.options.context_architecture != None:
-            flags["BOOST_CONTEXT_ARCHITECTURE"] = self.options.context_architecture
-        if self.options.context_assembler != None:
-            flags["BOOST_CONTEXT_ASSEMBLER"] = self.options.context_assembler
-        if self.options.context_asm_suffix != None:
-            flags["BOOST_CONTEXT_ASM_SUFFIX"] = self.options.context_asm_suffix
-        if self.options.context_implementation != None:
-            flags["BOOST_CONTEXT_IMPLEMENTATION"] = self.options.context_implementation
-
-        if self.options.fiber_numa_target_os != None:
-            flags["BOOST_FIBER_NUMA_TARGET_OS"] = self.options.fiber_numa_target_os
-
-        if self.options.iostreams_zlib != None:
-            flags["BOOST_IOSTREAMS_ENABLE_ZLIB"] = 'ON' if self.options.iostreams_zlib else 'OFF'
-        if self.options.iostreams_bzip2 != None:
-            flags["BOOST_IOSTREAMS_ENABLE_BZIP2"] = 'ON' if self.options.iostreams_bzip2 else 'OFF'
-        if self.options.iostreams_lzma != None:
-            flags["BOOST_IOSTREAMS_ENABLE_LZMA"] = 'ON' if self.options.iostreams_lzma else 'OFF'
-        if self.options.iostreams_zstd != None:
-            flags["BOOST_IOSTREAMS_ENABLE_ZSTD"] ='ON' if self.options.iostreams_zstd else 'OFF'
-
-        if self.options.locale_icu != None:
-            flags["BOOST_LOCALE_ENABLE_ICU"] = 'ON' if self.options.locale_icu else 'OFF'
-        if self.options.locale_iconv != None:
-            flags["BOOST_LOCALE_ENABLE_ICONV"] = 'ON' if self.options.locale_iconv else 'OFF'
-        if self.options.locale_posix != None:
-            flags["BOOST_LOCALE_ENABLE_POSIX"] = 'ON' if self.options.locale_posix else 'OFF'
-        if self.options.locale_std != None:
-            flags["BOOST_LOCALE_ENABLE_STD"] = 'ON' if self.options.locale_std else 'OFF'
-        if self.options.locale_winapi != None:
-            flags["BOOST_LOCALE_ENABLE_WINAPI"] = 'ON' if self.options.locale_winapi else 'OFF'
-
-        if self.options.stacktrace_noop != None:
-            flags["BOOST_STACKTRACE_ENABLE_NOOP"] = 'ON' if self.options.stacktrace_noop else 'OFF'
-        if self.options.stacktrace_backtrace != None:
-            flags["BOOST_STACKTRACE_ENABLE_BACKTRACE"] = 'ON' if self.options.stacktrace_backtrace else 'OFF'
-        if self.options.stacktrace_addr2line != None:
-            flags["BOOST_STACKTRACE_ENABLE_ADDR2LINE"] = 'ON' if self.options.stacktrace_addr2line else 'OFF'
-        if self.options.stacktrace_basic != None:
-            flags["BOOST_STACKTRACE_ENABLE_BASIC"] = 'ON' if self.options.stacktrace_basic else 'OFF'
-        if self.options.stacktrace_windbg != None:
-            flags["BOOST_STACKTRACE_ENABLE_WINDBG"] = 'ON' if self.options.stacktrace_windbg else 'OFF'
-        if self.options.stacktrace_windbg_cached != None:
-            flags["BOOST_STACKTRACE_ENABLE_WINDBG_CACHED"] = 'ON' if self.options.stacktrace_windbg_cached else 'OFF'
-        if self.options.stacktrace_from_exception != None:
-            flags["BOOST_STACKTRACE_ENABLE_FROM_EXCEPTION"] = 'ON' if self.options.stacktrace_from_exception else 'OFF'
-
-        if self.options.thread_threadapi != None:
-            flags["BOOST_THREAD_THREADAPI"] = 'ON' if self.options.thread_threadapi else 'OFF'
-
-        if self.options.with_python != None:
-            flags["BOOST_ENABLE_PYTHON"] = 'ON' if self.options.with_python else 'OFF'
-            if not self.options.with_python:
-                flags["Python_ROOT_DIR"] = os.path.dirname(self._python_executable)
+        with_python = self.options.get_safe("with_python")
+        if with_python is False:
+            flags["Python_ROOT_DIR"] = os.path.dirname(self._python_executable)
 
         include_libraries = ""
         for libname in self._available_libraries:
