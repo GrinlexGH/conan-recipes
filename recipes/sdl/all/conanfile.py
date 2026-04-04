@@ -41,6 +41,8 @@ class SDLRecipe(ConanFile):
         deps = CMakeDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
+        tc.variables["SDL_TESTS"] = False
+        tc.variables["SDL_EXAMPLES"] = False
         tc.generate()
 
     def build_system_requirements_(self):

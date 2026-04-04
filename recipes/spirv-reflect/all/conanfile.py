@@ -126,9 +126,22 @@ install(FILES
         cmake_layout(self, src_folder="src")
 
     def generate(self):
-        src_dir = os.path.join(os.environ.get("VULKAN_SDK"), "source", "SPIRV-Reflect")
+        vulkan_sdk = os.environ.get("VULKAN_SDK")
+
+        if self.settings.os == "Windows":
+            src_dir = os.path.join(vulkan_sdk, "Source", "SPIRV-Reflect")
+        else:
+            src_dir = os.path.abspath(os.path.join(vulkan_sdk, "..", "source", "SPIRV-Reflect"))
+
+        if not os.path.exists(src_dir):
+            self.output.warning(f"SPIRV-Reflect path not found: {src_dir}")
+
         self.output.info(f"Copying SPIRV-Reflect sources from {src_dir}")
-        copy(self, pattern="*", src=src_dir, dst=self.source_folder)
+
+        copy(self, pattern="spirv_reflect.h", src=src_dir, dst=self.source_folder)
+        copy(self, pattern="spirv_reflect.c", src=src_dir, dst=self.source_folder)
+        copy(self, pattern="include/*", src=src_dir, dst=self.source_folder)
+
         save(self, os.path.join(self.source_folder, "CMakeLists.txt"), self._cmakelists_file)
 
         tc = CMakeToolchain(self)
