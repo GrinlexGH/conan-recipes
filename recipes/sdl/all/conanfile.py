@@ -91,7 +91,8 @@ class SDLRecipe(ConanFile):
         cmake = CMake(self)
         cmake.install()
         # Copy android project
-        copy(self, "android-project/*", self.source_folder, self.package_folder)
+        if self.settings.os == "Android":
+            copy(self, "android-project/*", self.source_folder, self.package_folder)
         copy(self, "LICENSE*", self.source_folder, os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
