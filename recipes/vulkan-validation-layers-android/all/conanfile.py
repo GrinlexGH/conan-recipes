@@ -21,3 +21,7 @@ class VulkanValidationLayersAndroidRecipe(ConanFile):
 
     def package(self):
         copy(self, "*", self.source_folder, self.package_folder)
+
+    def package_info(self):
+        self.cpp_info.builddirs = [""]
+        self.cpp_info.set_property("cmake_find_mode", "none")
