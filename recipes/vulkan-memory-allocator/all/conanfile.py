@@ -53,8 +53,8 @@ class VulkanMemoryAllocatorRecipe(ConanFile):
 """
         save(self, os.path.join(self.source_folder, "vma_impl.cpp"), cpp_content)
 
-        cmake_content = """cmake_minimum_required(VERSION 3.15)
-project(VMA VERSION {version} LANGUAGES CXX)
+        cmake_content = f"""cmake_minimum_required(VERSION 3.15)
+project(VMA VERSION {self.version} LANGUAGES CXX)
 
 find_package(VulkanHeaders CONFIG REQUIRED)
 
@@ -100,7 +100,7 @@ install(FILES
     "${{CMAKE_CURRENT_BINARY_DIR}}/VulkanMemoryAllocatorConfigVersion.cmake"
     DESTINATION ${{CMAKE_INSTALL_LIBDIR}}/cmake/VulkanMemoryAllocator
 )
-""".format(version=str(self.version))
+"""
 
         save(self, os.path.join(self.source_folder, "CMakeLists.txt"), cmake_content)
 
