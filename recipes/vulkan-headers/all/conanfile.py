@@ -2,29 +2,18 @@ import os
 
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
-from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy, save
 
 required_conan_version = ">=2.20"
 
 
 class VulkanHeadersRecipe(ConanFile):
     name = "vulkan-headers"
-    package_type = "library"
-    implements = ["auto_shared_fpic"]
+    package_type = "header-library"
 
     license = "MIT"
 
     settings = "os", "arch", "compiler", "build_type"
-
-    options = {
-        "shared": [True, False],
-        "fPIC": [True, False],
-    }
-
-    default_options = {
-        "shared": True,
-        "fPIC": True,
-    }
 
     def export_sources(self):
         export_conandata_patches(self)
@@ -45,6 +34,10 @@ class VulkanHeadersRecipe(ConanFile):
         tc.generate()
 
     def build(self):
+        save(self, os.path.join(self.source_folder, "CMakeLists.txt"),
+            "\ntarget_compile_definitions(Vulkan-Headers INTERFACE VK_NO_PROTOTYPES)\n",
+            append=True
+        )
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
