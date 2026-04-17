@@ -7,7 +7,6 @@ from conan.tools.scm import Git
 
 required_conan_version = ">=2.20"
 
-
 class SDLMixerRecipe(ConanFile):
     name = "sdl_mixer"
     package_type = "library"

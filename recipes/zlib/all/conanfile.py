@@ -7,7 +7,6 @@ from conan.tools.scm import Version
 
 required_conan_version = ">=2.20"
 
-
 class ZlibRecipe(ConanFile):
     name = "zlib"
     package_type = "library"

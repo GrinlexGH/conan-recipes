@@ -3,7 +3,6 @@ from conan.tools.files import apply_conandata_patches, export_conandata_patches,
 
 required_conan_version = ">=2.20"
 
-
 class VulkanValidationLayersAndroidRecipe(ConanFile):
     name = "vulkan-validation-layers-android"
     package_type = "unknown"

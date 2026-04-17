@@ -7,7 +7,6 @@ from conan.errors import ConanInvalidConfiguration
 
 required_conan_version = ">=2.20"
 
-
 class SteamworksSDKRecipe(ConanFile):
     name = "steamworks_sdk"
     package_type = "shared-library"

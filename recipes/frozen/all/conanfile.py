@@ -2,11 +2,10 @@ import os
 
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
-from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, copy
 from conan.tools.scm import Git
 
 required_conan_version = ">=2.20"
-
 
 class FrozenRecipe(ConanFile):
     name = "frozen"

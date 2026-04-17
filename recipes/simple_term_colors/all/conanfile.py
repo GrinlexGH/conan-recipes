@@ -1,10 +1,11 @@
+import os
+
 from conan import ConanFile
 from conan.tools.build import check_min_cppstd
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, copy
 from conan.tools.scm import Git
 
 required_conan_version = ">=2.20"
-
 
 class SimpleTermColorsRecipe(ConanFile):
     name = "simple_term_colors"
@@ -32,6 +33,7 @@ class SimpleTermColorsRecipe(ConanFile):
 
     def package(self):
         copy(self, "include/*", src=self.source_folder, dst=self.package_folder)
+        copy(self, "LICENSE*", self.source_folder, os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
         self.cpp_info.bindirs = []

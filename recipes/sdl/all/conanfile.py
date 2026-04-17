@@ -7,7 +7,6 @@ from conan.tools.system.package_manager import Apt, Dnf, Zypper, PacMan
 
 required_conan_version = ">=2.20"
 
-
 class SDLRecipe(ConanFile):
     name = "sdl"
     package_type = "library"

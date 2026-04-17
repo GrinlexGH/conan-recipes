@@ -7,7 +7,6 @@ from conan.tools.scm import Git
 
 required_conan_version = ">=2.20"
 
-
 class SDLImageRecipe(ConanFile):
     name = "sdl_image"
     package_type = "library"

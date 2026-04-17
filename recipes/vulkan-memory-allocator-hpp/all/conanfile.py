@@ -2,10 +2,10 @@ import os
 
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
-from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy, replace_in_file
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, copy
+from conan.tools.scm import Git
 
 required_conan_version = ">=2.20"
-
 
 class VulkanMemoryAllocatorHppRecipe(ConanFile):
     name = "vulkan-memory-allocator-hpp"
@@ -20,10 +20,11 @@ class VulkanMemoryAllocatorHppRecipe(ConanFile):
 
     def requirements(self):
         self.requires("vulkan-headers/[>=1.4.327]")
-        self.requires(f"vulkan-memory-allocator/{self.version}")
 
     def source(self):
-        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
+        src_data = self.conan_data["sources"][self.version]
+        git = Git(self)
+        git.clone(url="https://github.com/YaaZ/VulkanMemoryAllocator-Hpp.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
         apply_conandata_patches(self)
 
     def layout(self):
@@ -37,20 +38,10 @@ class VulkanMemoryAllocatorHppRecipe(ConanFile):
         tc.cache_variables["FETCHCONTENT_SOURCE_DIR_VULKAN"] = "@"
         tc.cache_variables["VMA_HPP_DO_UPDATE"] = False
         tc.cache_variables["VMA_HPP_ENABLE_INSTALL"] = True
+        tc.cache_variables["VMA_ENABLE_INSTALL"] = True
         tc.generate()
 
     def build(self):
-        replace_in_file(self, os.path.join(self.source_folder, "CMakeLists.txt"),
-            "add_subdirectory(VulkanMemoryAllocator)",
-            "find_package(VulkanMemoryAllocator CONFIG REQUIRED)"
-        )
-
-        replace_in_file(self, os.path.join(self.source_folder, "include", "CMakeLists.txt"),
-            'add_library(VulkanMemoryAllocator-Hpp INTERFACE)',
-            'add_library(VulkanMemoryAllocator-Hpp INTERFACE)\n'
-            'target_link_libraries(VulkanMemoryAllocator-Hpp INTERFACE GPUOpen::VulkanMemoryAllocator)'
-        )
-
         cmake = CMake(self)
         cmake.configure()
 

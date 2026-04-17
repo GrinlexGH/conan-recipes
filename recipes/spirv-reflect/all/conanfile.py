@@ -39,7 +39,6 @@ def detect_vulkan_sdk_version(sdk_path: str) -> str:
 
     return f"{variant}.{major}.{minor}.{patch}"
 
-
 class SpirvReflectRecipe(ConanFile):
     name = "spirv-reflect"
 
@@ -134,7 +133,7 @@ install(FILES
             src_dir = os.path.abspath(os.path.join(vulkan_sdk, "..", "source", "SPIRV-Reflect"))
 
         if not os.path.exists(src_dir):
-            self.output.warning(f"SPIRV-Reflect path not found: {src_dir}")
+            self.output.error(f"SPIRV-Reflect path not found: {src_dir}")
 
         self.output.info(f"Copying SPIRV-Reflect sources from {src_dir}")
 

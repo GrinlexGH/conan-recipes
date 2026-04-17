@@ -170,7 +170,6 @@ CONFIGURE_OPTIONS = (
     "yap",
 )
 
-
 class BoostRecipe(ConanFile):
     name = "boost"
     package_type = "library"

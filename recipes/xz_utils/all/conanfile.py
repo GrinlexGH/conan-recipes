@@ -6,7 +6,6 @@ from conan.tools.files import apply_conandata_patches, export_conandata_patches,
 
 required_conan_version = ">=2.20"
 
-
 class XZUtilsRecipe(ConanFile):
     name = "xz_utils"
     package_type = "library"

@@ -6,7 +6,6 @@ from conan.tools.files import apply_conandata_patches, export_conandata_patches,
 
 required_conan_version = ">=2.20"
 
-
 class VkBootstrapRecipe(ConanFile):
     name = "vk-bootstrap"
     package_type = "library"
