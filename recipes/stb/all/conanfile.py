@@ -11,7 +11,7 @@ class StbRecipe(ConanFile):
     package_type = "header-library"
     implements = ["auto_header_only"]
 
-    license = "MIT / Public Domain"
+    license = "MIT", "Public Domain"
 
     settings = "os", "arch", "compiler", "build_type"
 

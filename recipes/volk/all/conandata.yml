@@ -1,9 +1,0 @@
-sources:
-  "1.4.341.0":
-    url: "https://github.com/zeux/volk/archive/refs/tags/vulkan-sdk-1.4.341.0.tar.gz"
-    sha256: "42df539c70ffdaea259e317aef73524512f4093f6f4dafb36fa6cf2680c823b9"
-patches:
-  "1.4.341.0":
-    - patch_file: "patches/1.4.341.0/0001-use-vulkan-headers.patch"
-      patch_description: "use vulkan headers instead of vulkan sdk"
-      patch_type: "conan"
