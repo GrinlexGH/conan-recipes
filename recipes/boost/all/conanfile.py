@@ -44,6 +44,7 @@ CONFIGURE_OPTIONS = (
     "coroutine2",
     "crc",
     "date_time",
+    "decimal",
     "describe",
     "detail",
     "dll",

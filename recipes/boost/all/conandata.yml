@@ -1,8 +1,16 @@
 sources:
+  "1.91.0-1":
+    url: "https://github.com/boostorg/boost/releases/download/boost-1.91.0-1/boost-1.91.0-1-cmake.tar.gz"
+    sha256: "8a82bd11a720c70923806c36ee5c26dbd2d630c1eaa1d8fad9a7bd5529908a26"
   "1.90.0":
     url: "https://github.com/boostorg/boost/releases/download/boost-1.90.0/boost-1.90.0-cmake.tar.gz"
     sha256: "913ca43d49e93d1b158c9862009add1518a4c665e7853b349a6492d158b036d4"
 patches:
+  "1.91.0":
+    - patch_file: "patches/0001-mingw-cobalt-link-cmake.patch"
+      patch_type: conan
+    - patch_file: "patches/0002-iostreams-zstd-target-name.patch"
+      patch_type: conan
   "1.90.0":
     - patch_file: "patches/0001-mingw-cobalt-link-cmake.patch"
       patch_type: conan

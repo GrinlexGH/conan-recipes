@@ -111,9 +111,6 @@ class SDLMixerRecipe(ConanFile):
         tc.variables["SDLMIXER_WAVPACK"] = "ON" if self.options.with_wavpack else "OFF"
         tc.generate()
 
-        cd = CMakeDeps(self)
-        cd.generate()
-
     def build(self):
         cmake = CMake(self)
         cmake.configure()
