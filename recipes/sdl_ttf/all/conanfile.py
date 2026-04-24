@@ -34,7 +34,7 @@ class SDLttfRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url="https://github.com/libsdl-org/SDL_image.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
+        git.clone(url="https://github.com/libsdl-org/SDL_ttf.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
         apply_conandata_patches(self)
 
     def requirements(self):
