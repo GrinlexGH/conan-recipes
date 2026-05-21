@@ -10,7 +10,7 @@ required_conan_version = ">=2.20"
 class FrozenRecipe(ConanFile):
     name = "frozen"
 
-    license = "Apache-2.0"
+    license = "Apache 2.0"
     description = "A header-only, constexpr alternative to gperf for C++14 users."
 
     settings = "os", "compiler", "build_type", "arch"
