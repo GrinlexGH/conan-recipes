@@ -61,6 +61,13 @@ class SDLMixerRecipe(ConanFile):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
         git.clone(url="https://github.com/libsdl-org/SDL_mixer.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
+        # HACK/TODO: use conan recipes for these libraries
+        git.folder = os.path.join(self.source_folder, "external", "flac")
+        git.checkout("1.5.0")
+        git.folder = os.path.join(self.source_folder, "external", "libgme")
+        git.checkout("0.6.5")
+        git.folder = os.path.join(self.source_folder, "external", "opus")
+        git.checkout("v1.6.1")
         apply_conandata_patches(self)
 
     def requirements(self):
