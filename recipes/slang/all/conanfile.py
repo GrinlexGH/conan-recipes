@@ -36,7 +36,7 @@ class SlangRecipe(ConanFile):
         "with_gfx": False,
         "with_slangc": True,
         "with_slangrt": False,
-        "with_slang_glslang": False,
+        "with_slang_glslang": True,
         "with_replayer": False,
     }
 

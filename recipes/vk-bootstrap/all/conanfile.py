@@ -44,6 +44,7 @@ class VkBootstrapRecipe(ConanFile):
         tc = CMakeToolchain(self)
         tc.variables["VK_BOOTSTRAP_TEST"] = False
         tc.variables["VK_BOOTSTRAP_INSTALL"] = True
+        tc.cache_variables["VK_BOOTSTRAP_POSITION_INDEPENDENT_CODE"] = bool(self.options.fPIC)
         tc.generate()
 
     def build(self):

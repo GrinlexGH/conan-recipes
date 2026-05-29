@@ -2,12 +2,3 @@ sources:
   "1.4.352":
     url: "https://github.com/charles-lunarg/vk-bootstrap/archive/refs/tags/v1.4.352.tar.gz"
     sha256: "6d368401a7a01fccc4f66160a7c6a193f5c6344029b5bfd38fcb89251c1209ee"
-  "1.4.350":
-    url: "https://github.com/charles-lunarg/vk-bootstrap/archive/refs/tags/v1.4.350.tar.gz"
-    sha256: "848637567C472EE334EA7B694E82C5C9F8966C9A8FA8E687A985223CAE2C0C1E"
-  "1.4.349":
-    url: "https://github.com/charles-lunarg/vk-bootstrap/archive/refs/tags/v1.4.349.tar.gz"
-    sha256: "0db474bcd9417bbcc40f66bb3b65d3179d48373ff979b604172ca5b670eb5b04"
-  "1.4.347":
-    url: "https://github.com/charles-lunarg/vk-bootstrap/archive/refs/tags/v1.4.347.tar.gz"
-    sha256: "6c1eb4b629bc6b52d4745bc463c271d2c32e00eb72fc5716ee4f257248642094"
