@@ -28,8 +28,6 @@ class glbindingRecipe(ConanFile):
         "aux": True,
     }
 
-    no_copy_source = True
-
     def export_sources(self):
         export_conandata_patches(self)
 

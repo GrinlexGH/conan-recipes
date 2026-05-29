@@ -27,7 +27,9 @@ class StbRecipe(ConanFile):
 
     def package(self):
         copy(self, "*.h", self.source_folder, os.path.join(self.package_folder, "include"))
-        copy(self, "*.c", self.source_folder, os.path.join(self.package_folder, "include"))
+        copy(self, "*.c", self.source_folder, os.path.join(self.package_folder, "include"),
+            excludes=[ os.path.join("*", "tests"), os.path.join("*", "stb_image_resize_test") ]
+        )
         copy(self, "LICENSE*", self.source_folder, os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
