@@ -19,7 +19,7 @@ class SlangRecipe(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "shared_slang": [None, True, False],
+        "slang_lib_type": [None, "static", "shared"],
         "with_dxil": [True, False],
         "with_gfx": [True, False],
         "with_slangc": [True, False],
@@ -31,7 +31,7 @@ class SlangRecipe(ConanFile):
     default_options = {
         "shared": False,
         "fPIC": True,
-        "shared_slang": None,
+        "slang_lib_type": None,
         "with_dxil": True,
         "with_gfx": False,
         "with_slangc": True,
@@ -49,8 +49,8 @@ class SlangRecipe(ConanFile):
         self.requires("vulkan-headers/[>=1.4.350]")
 
     def config_options(self):
-        if self.options.shared_slang is None or str(self.options.shared_slang) == "None":
-            self.options.shared_slang = self.options.shared
+        if self.options.slang_lib_type is None or str(self.options.slang_lib_type) == "None":
+            self.options.slang_lib_type = "shared" if bool(self.options.shared) else "static"
 
     def source(self):
         src_data = self.conan_data["sources"][self.version]
@@ -69,14 +69,14 @@ class SlangRecipe(ConanFile):
         tc.cache_variables["SLANG_ENABLE_GFX"] = bool(self.options.with_gfx)
         tc.cache_variables["SLANG_ENABLE_SLANGD"] = False
         tc.cache_variables["SLANG_ENABLE_SLANGC"] = bool(self.options.with_slangc)
-        tc.cache_variables["SLANG_ENABLE_SLANGI"] = False
+        tc.cache_variables["SLANG_ENABLE_SLANGI"] = True
         tc.cache_variables["SLANG_ENABLE_SLANGRT"] = bool(self.options.with_slangrt)
         tc.cache_variables["SLANG_ENABLE_SLANG_GLSLANG"] = bool(self.options.with_slang_glslang)
         tc.cache_variables["SLANG_ENABLE_TESTS"] = False
         tc.cache_variables["SLANG_ENABLE_EXAMPLES"] = False
         tc.cache_variables["SLANG_ENABLE_REPLAYER"] = bool(self.options.with_replayer)
         tc.cache_variables["SLANG_STANDARD_MODULE_DEVELOP_BUILD"] = False
-        tc.cache_variables["SLANG_LIB_TYPE"] = "SHARED" if bool(self.options.shared_slang) else "STATIC"
+        tc.cache_variables["SLANG_LIB_TYPE"] = "STATIC" if str(self.options.slang_lib_type) == "static" else "SHARED"
         tc.cache_variables["SLANG_ENABLE_RELEASE_DEBUG_INFO"] = False
         tc.cache_variables["SLANG_ENABLE_SPLIT_DEBUG_INFO"] = False
         tc.cache_variables["SLANG_SLANG_LLVM_FLAVOR"] = "DISABLE"
