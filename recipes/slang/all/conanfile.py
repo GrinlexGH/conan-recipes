@@ -4,6 +4,7 @@ from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, copy
 from conan.tools.scm import Git
+from conan.tools.build import cross_building
 
 required_conan_version = ">=2.20"
 
@@ -45,6 +46,10 @@ class SlangRecipe(ConanFile):
     def export_sources(self):
         export_conandata_patches(self)
 
+    def build_requirements(self):
+        if cross_building(self):
+            self.tool_requires(f"{self.name}/{self.version}")
+
     def requirements(self):
         self.requires("vulkan-headers/[>=1.4.350]")
 
@@ -65,6 +70,9 @@ class SlangRecipe(ConanFile):
         deps = CMakeDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
+        if cross_building(self):
+            generators_bin_dir = self.dependencies.build["slang"].cpp_info.bindirs[0]
+            tc.cache_variables["SLANG_GENERATORS_PATH"] = generators_bin_dir.replace("\\", "/")
         tc.cache_variables["SLANG_ENABLE_DXIL"] = bool(self.options.with_dxil)
         tc.cache_variables["SLANG_ENABLE_GFX"] = bool(self.options.with_gfx)
         tc.cache_variables["SLANG_ENABLE_SLANGD"] = False
@@ -87,10 +95,16 @@ class SlangRecipe(ConanFile):
     def build(self):
         cmake = CMake(self)
         cmake.configure()
+        if not cross_building(self):
+            self.output.info("Building slang generators...")
+            cmake.build(target="all-generators")
         cmake.build()
 
     def package(self):
         cmake = CMake(self)
+        if not cross_building(self):
+            self.output.info("Installing slang generators component...")
+            cmake.install(component="generators")
         cmake.install()
         copy(self, "LICENSE*", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
 
