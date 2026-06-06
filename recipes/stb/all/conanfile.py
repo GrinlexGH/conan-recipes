@@ -13,7 +13,7 @@ class StbRecipe(ConanFile):
 
     license = "MIT", "Public Domain"
 
-    settings = "os", "arch", "compiler", "build_type"
+    settings = "os", "arch", "compiler"
 
     def export_sources(self):
         export_conandata_patches(self)
@@ -28,7 +28,7 @@ class StbRecipe(ConanFile):
     def package(self):
         copy(self, "*.h", self.source_folder, os.path.join(self.package_folder, "include"))
         copy(self, "*.c", self.source_folder, os.path.join(self.package_folder, "include"),
-            excludes=[ os.path.join("*", "tests"), os.path.join("*", "stb_image_resize_test") ]
+            excludes=[ os.path.join(self.source_folder, "tests"), os.path.join(self.source_folder, "stb_image_resize_test") ]
         )
         copy(self, "LICENSE*", self.source_folder, os.path.join(self.package_folder, "licenses"))
 
