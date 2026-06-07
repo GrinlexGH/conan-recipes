@@ -13,7 +13,7 @@ class SteamworksSDKRecipe(ConanFile):
 
     license = "STEAMWORKS SDK license"
 
-    settings = "os", "compiler", "build_type", "arch"
+    settings = "os", "arch"
 
     no_copy_source = True
 

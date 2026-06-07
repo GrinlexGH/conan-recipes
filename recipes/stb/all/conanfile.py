@@ -13,8 +13,6 @@ class StbRecipe(ConanFile):
 
     license = "MIT", "Public Domain"
 
-    settings = "os", "arch", "compiler"
-
     def export_sources(self):
         export_conandata_patches(self)
 
