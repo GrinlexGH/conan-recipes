@@ -1,14 +1,20 @@
 sources:
+  "2026.11":
+    tag: "v2026.11"
   "2026.10.2":
     tag: "v2026.10.2"
   "2026.10":
     tag: "v2026.10"
   "2026.9.1":
     tag: "v2026.9.1"
-common_patches: &common_patches
+static_install_fix_0002: &static_install_fix_0002
+  - patch_file: "patches/0002-static-install-fix.patch"
+    patch_type: conan
+static_install_fix_0001: &static_install_fix_0001
   - patch_file: "patches/0001-static-install-fix.patch"
     patch_type: conan
 patches:
-  "2026.10.2": *common_patches
-  "2026.10": *common_patches
-  "2026.9.1": *common_patches
+  "2026.11": *static_install_fix_0002
+  "2026.10.2": *static_install_fix_0001
+  "2026.10": *static_install_fix_0001
+  "2026.9.1": *static_install_fix_0001
