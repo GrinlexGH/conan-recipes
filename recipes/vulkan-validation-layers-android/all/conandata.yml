@@ -1,4 +1,7 @@
 sources:
+  "1.4.350.1":
+    url: "https://github.com/KhronosGroup/Vulkan-ValidationLayers/releases/download/vulkan-sdk-1.4.350.1/android-binaries-1.4.350.1.tar.gz"
+    sha256: "74a4c0ace2095792371c4eb53698541247b2777119e95a82137a892f9ea336dd"
   "1.4.350.0":
     url: "https://github.com/KhronosGroup/Vulkan-ValidationLayers/releases/download/vulkan-sdk-1.4.350.0/android-binaries-1.4.350.0.tar.gz"
     sha256: "EA64E96A7C0C4A3711A506B9BC769A0EADC9924F389504051AC1F392213D1B31"
