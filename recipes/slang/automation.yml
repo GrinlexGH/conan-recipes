@@ -1,0 +1,5 @@
+type: "github_tags"
+repo: "shader-slang/slang"
+format: "tag_only"
+tag_regex: 'v\d+.*'
+version_regex: 'v(\d+.*)'

@@ -1,2 +1,6 @@
 **/build
 **/CMakeUserPresets.json
+.idea
+.venv
+uv.lock
+pyproject.toml

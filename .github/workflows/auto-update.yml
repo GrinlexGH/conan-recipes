@@ -1,0 +1,77 @@
+name: Automated Recipe Updater
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Tools
+        run: |
+          pip install ruamel.yaml conan
+          conan profile detect --force
+
+      - name: Main Run Update Script
+        id: update_script
+        run: |
+          echo "Создание резервной копии рецептов..."
+          cp -r recipes /tmp/recipes_backup
+          python .github/scripts/update_index.py
+
+      - name: Smoke Test and Generate Report
+        id: report
+        run: |
+          if [ -z "$UPDATED_PACKAGES" ]; then
+            echo "has_updates=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "has_updates=true" >> $GITHUB_OUTPUT
+          
+          echo "### Packages autoupdate report" >> $GITHUB_STEP_SUMMARY
+          echo "| Package | Version | Info |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- | --- |" >> $GITHUB_STEP_SUMMARY
+          
+          echo "Package autoupdate." > /tmp/pr_body.md
+          echo "" >> /tmp/pr_body.md
+          echo "### Check status:" >> /tmp/pr_body.md
+          
+          NEED_ATTENTION="false"
+          IFS=',' read -r -a pkgs <<< "$UPDATED_PACKAGES"
+          for item in "${pkgs[@]}"; do
+            name=$(echo "$item" | cut -d':' -f1)
+            ver=$(echo "$item" | cut -d':' -f2)
+            patch_status=$(echo "$item" | cut -d':' -f3)
+            
+            if [ "$patch_status" = "HAS_PATCHES" ]; then
+              NEED_ATTENTION="true"
+              info="ℹ️ Patch review needed"
+            else
+              info="👌 Should be fine"
+            fi
+            
+            echo "| $name | $ver | $info |" >> $GITHUB_STEP_SUMMARY
+            echo "* **$name** ($ver) - $info" >> /tmp/pr_body.md
+          done
+
+      - name: Create Pull Request
+        if: steps.report.outputs.has_updates == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "automated: update thirdparty dependencies"
+          branch: "automation/bump-dependencies"
+          title: "🤖 Automated dependency updates"
+          body-path: /tmp/pr_body.md
+          labels: |
+            automated-update

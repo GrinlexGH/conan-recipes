@@ -1,0 +1,4 @@
+type: "github_tags"
+repo: "boostorg/boost"
+format: "tag_only"
+version_regex: 'boost-(\d+.*)'
