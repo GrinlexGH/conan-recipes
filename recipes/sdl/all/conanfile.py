@@ -49,7 +49,7 @@ class SDLRecipe(ConanFile):
             return
 
         # Ubuntu
-        pkgs = ["build-essential", "git", "make", "pkg-config", "cmake", "ninja-build", "libasound2-dev",
+        pkgs = ["build-essential", "libasound2-dev",
                 "libpulse-dev", "libaudio-dev", "libfribidi-dev", "libjack-dev", "libsndio-dev", "libx11-dev",
                 "libxext-dev", "libxrandr-dev", "libxcursor-dev", "libxfixes-dev", "libxi-dev", "libxss-dev",
                 "libxtst-dev", "libxkbcommon-dev", "libdrm-dev", "libgbm-dev", "libgl1-mesa-dev", "libgles2-mesa-dev",
@@ -58,7 +58,7 @@ class SDLRecipe(ConanFile):
         Apt(self).install(pkgs)
 
         # Fedora
-        pkgs = ["gcc", "git-core", "make", "cmake", "alsa-lib-devel", "fribidi-devel", "pulseaudio-libs-devel",
+        pkgs = ["git-core", "alsa-lib-devel", "fribidi-devel", "pulseaudio-libs-devel",
                 "pipewire-devel", "libX11-devel", "libXext-devel", "libXrandr-devel", "libXcursor-devel",
                 "libXfixes-devel", "libXi-devel", "libXScrnSaver-devel", "libXtst-devel", "dbus-devel", "ibus-devel",
                 "systemd-devel", "mesa-libGL-devel", "mesa-libGLES-devel", "mesa-libEGL-devel", "libxkbcommon-devel",
