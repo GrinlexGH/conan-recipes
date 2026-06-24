@@ -1,0 +1,30 @@
+diff --git a/external/libpng/CMakeLists.txt b/external/libpng/CMakeLists.txt
+index dd0ab96db..72779f5e2 100644
+--- a/external/libpng/CMakeLists.txt
++++ b/external/libpng/CMakeLists.txt
+@@ -402,10 +402,10 @@ VERS_2 { global: sym2; main; } VERS_1;
+   if(NOT CMAKE_HOST_SOLARIS)
+     # Avoid using CMAKE_SHARED_LIBRARY_C_FLAGS in version script checks on
+     # Solaris, because of an incompatibility with the Solaris link editor.
+-    list(APPEND CMAKE_REQUIRED_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
++    STRING(APPEND CMAKE_REQUIRED_FLAGS " ${CMAKE_SHARED_LIBRARY_C_FLAGS}")
+   endif()
+-  list(APPEND CMAKE_REQUIRED_FLAGS
+-              "-Wl,--version-script='${CMAKE_CURRENT_BINARY_DIR}/conftest.map'")
++  STRING(APPEND CMAKE_REQUIRED_FLAGS
++                " -Wl,--version-script='${CMAKE_CURRENT_BINARY_DIR}/conftest.map'")
+   check_c_source_compiles("
+ void sym1(void) {}
+ void sym2(void) {}
+@@ -416,9 +416,9 @@ int main(void) { return 0; }
+     if(NOT CMAKE_HOST_SOLARIS)
+       # Again, avoid using CMAKE_SHARED_LIBRARY_C_FLAGS in version script
+       # checks on Solaris.
+-      list(APPEND CMAKE_REQUIRED_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
++      STRING(APPEND CMAKE_REQUIRED_FLAGS " ${CMAKE_SHARED_LIBRARY_C_FLAGS}")
+     endif()
+-    list(APPEND CMAKE_REQUIRED_FLAGS "-Wl,-M -Wl,${CMAKE_CURRENT_BINARY_DIR}/conftest.map")
++    STRING(APPEND CMAKE_REQUIRED_FLAGS " -Wl,-M -Wl,${CMAKE_CURRENT_BINARY_DIR}/conftest.map")
+     check_c_source_compiles("
+ void sym1(void) {}
+ void sym2(void) {}

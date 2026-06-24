@@ -185,7 +185,6 @@ class BoostRecipe(ConanFile):
         "fPIC": [True, False],
 
         "runtime": [None, "static", "shared"],
-        "use_modules": [True, False],
 
         "python_version": [None, "ANY"],
         "python_executable": [None, "ANY"],
@@ -232,7 +231,6 @@ class BoostRecipe(ConanFile):
         "fPIC": True,
 
         "runtime": None,
-        "use_modules": False,
 
         "python_version": None,
         "python_executable": None,
@@ -387,7 +385,6 @@ class BoostRecipe(ConanFile):
     @property
     def _build_flags(self):
         bool_options = {
-            "use_modules": "BOOST_USE_MODULES",
             "filesystem_use_std_fs": "BOOST_DLL_USE_STD_FS",
             "system_use_utf8": "BOOST_SYSTEM_USE_UTF8",
             "asio_no_deprecated": "BOOST_ASIO_NO_DEPRECATED",

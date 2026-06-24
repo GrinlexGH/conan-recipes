@@ -19,26 +19,17 @@ class SDLImageRecipe(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "with_libjpeg": [True, False],
-        "with_libtiff": [True, False],
-        "with_libpng": [True, False],
-        "with_libwebp": [True, False],
-        "with_avif": [True, False],
-        "with_jxl": [True, False],
     }
 
     default_options = {
         "shared": True,
         "fPIC": True,
-        "with_libjpeg": True,
-        "with_libtiff": True,
-        "with_libpng": True,
-        "with_libwebp": True,
-        "with_avif": True,
-        "with_jxl": False,
     }
 
     no_copy_source = True
+
+    def build_requirements(self):
+        self.build_requires("nasm/[>=3.01]")
 
     def export_sources(self):
         export_conandata_patches(self)
@@ -62,12 +53,6 @@ class SDLImageRecipe(ConanFile):
         tc.cache_variables["SDLIMAGE_VENDORED"] = True
         tc.cache_variables["SDLIMAGE_SAMPLES"] = False
         tc.cache_variables["SDLIMAGE_STRICT"] = True
-        tc.cache_variables["SDLIMAGE_AVIF"] = self.options.with_avif
-        tc.cache_variables["SDLIMAGE_JPG"] = self.options.with_libjpeg
-        tc.cache_variables["SDLIMAGE_JXL"] = self.options.with_jxl
-        tc.cache_variables["SDLIMAGE_PNG"] = self.options.with_libpng
-        tc.cache_variables["SDLIMAGE_TIF"] = self.options.with_libtiff
-        tc.cache_variables["SDLIMAGE_WEBP"] = self.options.with_libwebp
         tc.generate()
 
     def build(self):
