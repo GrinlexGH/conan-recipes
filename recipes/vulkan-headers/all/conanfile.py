@@ -33,10 +33,6 @@ class VulkanHeadersRecipe(ConanFile):
         tc.generate()
 
     def build(self):
-        save(self, os.path.join(self.source_folder, "CMakeLists.txt"),
-            "\ntarget_compile_definitions(Vulkan-Headers INTERFACE VK_NO_PROTOTYPES)\n",
-            append=True
-        )
         cmake = CMake(self)
         cmake.configure()
         cmake.build()

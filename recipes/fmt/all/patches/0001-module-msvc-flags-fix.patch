@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ee568cec..aae70032 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -338,7 +338,7 @@ function (add_module_library name)
+   # Modules require C++20.
+   target_compile_features(${name} PUBLIC cxx_std_20)
+ 
+-  if (MSVC)
++  if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+     if (NOT CMAKE_GENERATOR STREQUAL "Ninja")
+       set(BMI_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+       file(TO_NATIVE_PATH "${BMI_DIR}/${name}.ifc" BMI)

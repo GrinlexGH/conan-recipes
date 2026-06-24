@@ -24,7 +24,11 @@ class VulkanMemoryAllocatorHppRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url="https://github.com/YaaZ/VulkanMemoryAllocator-Hpp.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
+        url = src_data.get("url", "https://github.com/YaaZ/VulkanMemoryAllocator-Hpp.git")
+        if "commit" in src_data:
+            git.clone(url=url, args=["--recursive", "--revision", src_data["commit"]], target=self.source_folder)
+        else:
+            git.clone(url=url, args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
         apply_conandata_patches(self)
 
     def layout(self):
