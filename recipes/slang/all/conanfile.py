@@ -12,9 +12,6 @@ class SlangRecipe(ConanFile):
     name = "slang"
     package_type = "library"
     implements = ["auto_shared_fpic"]
-
-    license = "Apache 2.0"
-
     settings = "os", "arch", "compiler", "build_type"
 
     options = {
