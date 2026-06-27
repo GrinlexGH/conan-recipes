@@ -28,9 +28,6 @@ class SDLImageRecipe(ConanFile):
 
     no_copy_source = True
 
-    def build_requirements(self):
-        self.build_requires("nasm/[>=3.01]")
-
     def export_sources(self):
         export_conandata_patches(self)
 
@@ -53,6 +50,7 @@ class SDLImageRecipe(ConanFile):
         tc.cache_variables["SDLIMAGE_VENDORED"] = True
         tc.cache_variables["SDLIMAGE_SAMPLES"] = False
         tc.cache_variables["SDLIMAGE_STRICT"] = True
+        tc.cache_variables["SDLIMAGE_AVIF"] = False # difficult dependencies for this file format
         tc.generate()
 
     def build(self):
