@@ -1,4 +1,7 @@
 sources:
+  "3.4.12":
+    url: "https://github.com/libsdl-org/SDL/archive/refs/tags/release-3.4.12.tar.gz"
+    sha256: "b68381f06a7580e63400b3b6eb547ec57d8c3ebde70f9f40e0aba530ba05da27"
   "3.4.10":
     url: "https://github.com/libsdl-org/SDL/archive/refs/tags/release-3.4.10.tar.gz"
     sha256: "0DC11D980BA17250200718FA4E28011DA293F27ED92F92203AFFFE396811F307"
