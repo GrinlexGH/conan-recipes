@@ -4,7 +4,3 @@ sources:
     commit: 'f70c1ebb2ae1b023e6d1ff2d6464b38c924409e4'
   '3.3.0+3':
     tag: 'v3.3.0+3'
-patches:
-  'pr-87':
-    - patch_file: 'patches/0001-remove-private-module-fragment.patch'
-      patch_type: conan
