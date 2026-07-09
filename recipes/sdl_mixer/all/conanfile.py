@@ -115,4 +115,7 @@ class SDLMixerRecipe(ConanFile):
     def package_info(self):
         self.cpp_info.set_property("cmake_find_mode", "none")
         self.cpp_info.set_property("cmake_file_name", "SDL3_mixer")
-        self.cpp_info.builddirs = ["cmake"]
+        if self.settings.os == "Windows" and self.settings.get_safe("compiler.runtime_type"):
+            self.cpp_info.builddirs = ["cmake"]
+        else:
+            self.cpp_info.builddirs = [os.path.join("lib", "cmake", "SDL3_mixer")]

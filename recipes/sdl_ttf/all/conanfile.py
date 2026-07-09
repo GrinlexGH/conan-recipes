@@ -43,7 +43,6 @@ class SDLttfRecipe(ConanFile):
         deps = CMakeConfigDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
-        tc.cache_variables["SDLTTF_INSTALL_CMAKEDIR_ROOT"] = "cmake"
         tc.cache_variables["SDLTTF_INSTALL"] = True
         tc.cache_variables["SDLTTF_VENDORED"] = True
         tc.cache_variables["SDLTTF_STRICT"] = True
@@ -63,4 +62,7 @@ class SDLttfRecipe(ConanFile):
     def package_info(self):
         self.cpp_info.set_property("cmake_find_mode", "none")
         self.cpp_info.set_property("cmake_file_name", "SDL3_ttf")
-        self.cpp_info.builddirs = ["cmake"]
+        if self.settings.os == "Windows" and self.settings.get_safe("compiler.runtime_type"):
+            self.cpp_info.builddirs = ["cmake"]
+        else:
+            self.cpp_info.builddirs = [os.path.join("lib", "cmake", "SDL3_ttf")]
