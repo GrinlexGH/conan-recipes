@@ -491,6 +491,5 @@ class BoostRecipe(ConanFile):
         self.cpp_info.set_property("cmake_find_mode", "none")
         self.cpp_info.set_property("cmake_file_name", "Boost")
         self.cpp_info.builddirs = [
-            os.path.join("lib", "cmake", f"Boost-{".".join(map(str, Version(self.version).main))}"),
-            os.path.join("lib64", "cmake", f"Boost-{".".join(map(str, Version(self.version).main))}"),
+            os.path.join("lib", "cmake", f"Boost-{".".join(map(str, Version(self.version).main))}")
         ]

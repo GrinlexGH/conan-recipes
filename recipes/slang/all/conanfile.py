@@ -111,7 +111,4 @@ class SlangRecipe(ConanFile):
         if self.settings.os == "Windows":
             self.cpp_info.builddirs = ["cmake"]
         else:
-            self.cpp_info.builddirs = [
-                os.path.join("lib", "cmake", "slang"),
-                os.path.join("lib64", "cmake", "slang"),
-            ]
+            self.cpp_info.builddirs = [os.path.join("lib", "cmake", "slang")]

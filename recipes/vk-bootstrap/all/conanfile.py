@@ -57,7 +57,4 @@ class VkBootstrapRecipe(ConanFile):
     def package_info(self):
         self.cpp_info.set_property("cmake_find_mode", "none")
         self.cpp_info.set_property("cmake_file_name", "vk-bootstrap")
-        self.cpp_info.builddirs = [
-            os.path.join("lib", "cmake", "vk-bootstrap"),
-            os.path.join("lib64", "cmake", "vk-bootstrap"),
-        ]
+        self.cpp_info.builddirs = [os.path.join("lib", "cmake", "vk-bootstrap")]

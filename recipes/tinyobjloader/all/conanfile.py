@@ -58,7 +58,4 @@ class tinyobjloaderRecipe(ConanFile):
     def package_info(self):
         self.cpp_info.set_property("cmake_find_mode", "none")
         self.cpp_info.set_property("cmake_file_name", "tinyobjloader")
-        self.cpp_info.builddirs = [
-            os.path.join("lib", "tinyobjloader", "cmake"),
-            os.path.join("lib64", "tinyobjloader", "cmake"),
-        ]
+        self.cpp_info.builddirs = [os.path.join("lib", "tinyobjloader", "cmake")]
