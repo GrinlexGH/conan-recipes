@@ -1,7 +1,7 @@
 import os
 
 from conan import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeConfigDeps
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
 
 required_conan_version = ">=2.20"
@@ -10,11 +10,7 @@ class fmtRecipe(ConanFile):
     name = "fmt"
     package_type = "library"
     implements = ["auto_shared_fpic"]
-
-    license = "MIT"
-
     settings = "os", "arch", "compiler", "build_type"
-
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
@@ -38,7 +34,7 @@ class fmtRecipe(ConanFile):
         cmake_layout(self, src_folder="src")
 
     def generate(self):
-        deps = CMakeDeps(self)
+        deps = CMakeConfigDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
         tc.variables["FMT_DOC"] = "OFF"
@@ -58,5 +54,9 @@ class fmtRecipe(ConanFile):
         copy(self, pattern="LICENSE", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
-        self.cpp_info.builddirs = [""]
         self.cpp_info.set_property("cmake_find_mode", "none")
+        self.cpp_info.set_property("cmake_file_name", "fmt")
+        self.cpp_info.builddirs = [
+            os.path.join("lib", "cmake", "fmt"),
+            os.path.join("lib64", "cmake", "fmt"),
+        ]

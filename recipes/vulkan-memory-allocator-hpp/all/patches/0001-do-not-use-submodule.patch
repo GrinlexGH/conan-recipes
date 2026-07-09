@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2b9ef01..a41631b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -47,7 +47,7 @@ elseif (TARGET Vulkan-HppModule)
+     set(VMA_HPP_VULKAN_MODULE Vulkan-HppModule)
+ endif ()
+ 
+-add_subdirectory(VulkanMemoryAllocator)
++find_package(VulkanMemoryAllocator REQUIRED)
+ add_subdirectory(include)
+ 
+ if (NOT ${PROJECT_VERSION} STREQUAL ${VMA_HPP_PROJECT_VERSION})

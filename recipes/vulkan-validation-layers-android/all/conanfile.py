@@ -6,9 +6,6 @@ required_conan_version = ">=2.20"
 class VulkanValidationLayersAndroidRecipe(ConanFile):
     name = "vulkan-validation-layers-android"
     package_type = "unknown"
-
-    license = "Apache 2.0"
-
     no_copy_source = True
 
     def export_sources(self):
@@ -22,5 +19,4 @@ class VulkanValidationLayersAndroidRecipe(ConanFile):
         copy(self, "*", self.source_folder, self.package_folder)
 
     def package_info(self):
-        self.cpp_info.builddirs = [""]
         self.cpp_info.set_property("cmake_find_mode", "none")

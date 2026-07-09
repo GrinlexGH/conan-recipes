@@ -1,5 +1,3 @@
 versions:
-  'pr-87':
-    folder: all
-  '3.3.0+3':
+  '3.4.0-pre':
     folder: all

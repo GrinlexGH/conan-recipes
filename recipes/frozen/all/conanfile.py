@@ -1,7 +1,7 @@
 import os
 
 from conan import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeConfigDeps
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, copy
 from conan.tools.scm import Git
 
@@ -9,10 +9,8 @@ required_conan_version = ">=2.20"
 
 class FrozenRecipe(ConanFile):
     name = "frozen"
-
-    license = "Apache 2.0"
-    description = "A header-only, constexpr alternative to gperf for C++14 users."
-
+    package_type = "header-library"
+    implements = ["auto_header_only"]
     settings = "os", "compiler", "build_type", "arch"
 
     def export_sources(self):
@@ -29,7 +27,7 @@ class FrozenRecipe(ConanFile):
         cmake_layout(self, src_folder="src")
 
     def generate(self):
-        deps = CMakeDeps(self)
+        deps = CMakeConfigDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
         tc.variables["frozen.installation"] = "ON"
@@ -47,5 +45,6 @@ class FrozenRecipe(ConanFile):
         copy(self, "LICENSE*", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
-        self.cpp_info.builddirs = [""]
         self.cpp_info.set_property("cmake_find_mode", "none")
+        self.cpp_info.set_property("cmake_file_name", "frozen")
+        self.cpp_info.builddirs = [os.path.join("share", "cmake", "frozen"),]

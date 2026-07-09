@@ -5,8 +5,9 @@ from io import StringIO
 import yaml
 from conan import ConanFile
 from conan.errors import ConanException, ConanInvalidConfiguration
-from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeConfigDeps
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
+from conan.tools.scm import Version
 
 required_conan_version = ">=2.20"
 
@@ -175,29 +176,20 @@ class BoostRecipe(ConanFile):
     name = "boost"
     package_type = "library"
     implements = ["auto_shared_fpic"]
-
-    license = "BSL-1.0"
-
     settings = "os", "arch", "compiler", "build_type"
-
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-
         "runtime": [None, "static", "shared"],
-
         "python_version": [None, "ANY"],
         "python_executable": [None, "ANY"],
-
         "asio_no_deprecated": [True, False],
         "filesystem_no_deprecated": [True, False],
         "filesystem_use_std_fs": [True, False],
         "filesystem_version": [None, "3", "4"],
         "system_use_utf8": [True, False],
-
         "layout": [None, "system", "versioned", "tagged"],
         "visibility": [None, "default", "hidden", "protected", "internal"],
-
         "context_binary_format": [None, "elf", "mach-o", "pe", "xcoff"],
         "context_abi": [None, "aapcs", "eabi", "ms", "n32", "n64", "o32", "o64", "sysv", "x32"],
         "context_architecture": [None, "arm", "arm64", "loongarch64", "mips32", "mips64", "ppc32", "ppc64", "riscv64", "s390x", "i386", "x86_64", "combined"],
@@ -316,6 +308,12 @@ class BoostRecipe(ConanFile):
                                        "import sys; "
                                        "print('{}.{}'.format(sys.version_info[0], sys.version_info[1]))")
 
+    def export(self):
+        copy(self, f"dependencies/{self._dependency_filename}", src=self.recipe_folder, dst=self.export_folder)
+
+    def export_sources(self):
+        export_conandata_patches(self)
+
     def requirements(self):
         if self.options.iostreams_zlib:
             self.requires("zlib/[>=1.3.1]")
@@ -331,12 +329,6 @@ class BoostRecipe(ConanFile):
             self.requires("libiconv/[>=1.18]")
         if self.options.stacktrace_backtrace:
             self.requires("libbacktrace/cci.20240730", transitive_headers=True, transitive_libs=True)
-
-    def export(self):
-        copy(self, f"dependencies/{self._dependency_filename}", src=self.recipe_folder, dst=self.export_folder)
-
-    def export_sources(self):
-        export_conandata_patches(self)
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
@@ -476,7 +468,7 @@ class BoostRecipe(ConanFile):
         return flags
 
     def generate(self):
-        deps = CMakeDeps(self)
+        deps = CMakeConfigDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
         for key, value in self._build_definitions.items():
@@ -496,5 +488,9 @@ class BoostRecipe(ConanFile):
         copy(self, "LICENSE*", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
-        self.cpp_info.builddirs = [""]
         self.cpp_info.set_property("cmake_find_mode", "none")
+        self.cpp_info.set_property("cmake_file_name", "Boost")
+        self.cpp_info.builddirs = [
+            os.path.join("lib", "cmake", f"Boost-{".".join(map(str, Version(self.version).main))}"),
+            os.path.join("lib64", "cmake", f"Boost-{".".join(map(str, Version(self.version).main))}"),
+        ]

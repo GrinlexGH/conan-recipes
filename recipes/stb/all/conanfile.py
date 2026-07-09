@@ -10,8 +10,7 @@ class StbRecipe(ConanFile):
     name = "stb"
     package_type = "header-library"
     implements = ["auto_header_only"]
-
-    license = "MIT", "Public Domain"
+    settings = "os", "arch", "compiler", "build_type"
 
     def export_sources(self):
         export_conandata_patches(self)

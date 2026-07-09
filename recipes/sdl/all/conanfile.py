@@ -1,7 +1,7 @@
 import os
 
 from conan import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeConfigDeps
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
 from conan.tools.system.package_manager import Apt, Dnf, Zypper, PacMan
 
@@ -11,11 +11,7 @@ class SDLRecipe(ConanFile):
     name = "sdl"
     package_type = "library"
     implements = ["auto_shared_fpic"]
-
-    license = "Zlib"
-
     settings = "os", "arch", "compiler", "build_type"
-
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
@@ -37,9 +33,10 @@ class SDLRecipe(ConanFile):
         cmake_layout(self, src_folder="src")
 
     def generate(self):
-        deps = CMakeDeps(self)
+        deps = CMakeConfigDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
+        tc.cache_variables["SDL_INSTALL_CMAKEDIR_ROOT"] = "cmake"
         tc.variables["SDL_TESTS"] = False
         tc.variables["SDL_EXAMPLES"] = False
         tc.generate()
@@ -95,5 +92,6 @@ class SDLRecipe(ConanFile):
         copy(self, "LICENSE*", self.source_folder, os.path.join(self.package_folder, "licenses"))
 
     def package_info(self):
-        self.cpp_info.builddirs = [""]
         self.cpp_info.set_property("cmake_find_mode", "none")
+        self.cpp_info.set_property("cmake_file_name", "SDL3")
+        self.cpp_info.builddirs = ["cmake"]

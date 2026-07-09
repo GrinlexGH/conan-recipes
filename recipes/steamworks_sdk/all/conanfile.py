@@ -10,11 +10,7 @@ required_conan_version = ">=2.20"
 class SteamworksSDKRecipe(ConanFile):
     name = "steamworks_sdk"
     package_type = "shared-library"
-
-    license = "STEAMWORKS SDK license"
-
-    settings = "os", "arch"
-
+    settings = "os", "arch", "compiler", "build_type"
     no_copy_source = True
 
     def export_sources(self):

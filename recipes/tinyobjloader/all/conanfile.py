@@ -1,43 +1,35 @@
 import os
 
 from conan import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeConfigDeps
 from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, load, replace_in_file
 
 required_conan_version = ">=2.20"
 
 class tinyobjloaderRecipe(ConanFile):
     name = "tinyobjloader"
-    package_type = "library"
-    implements = ["auto_shared_fpic"]
-
-    license = "MIT"
-
-    settings = "os", "arch", "build_type", "compiler"
-
+    package_type = "static-library"
+    settings = "os", "arch", "compiler", "build_type"
     options = {
-        "shared": [True, False],
-        "fPIC": [True, False],
         "double": [True, False],
     }
 
     default_options = {
-        "shared": False,
-        "fPIC": True,
         "double": False,
     }
 
     def export_sources(self):
         export_conandata_patches(self)
 
+    def source(self):
+        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
+        apply_conandata_patches(self)
+
     def layout(self):
         cmake_layout(self, src_folder="src")
 
-    def source(self):
-        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
-
     def generate(self):
-        deps = CMakeDeps(self)
+        deps = CMakeConfigDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
         tc.variables["TINYOBJLOADER_USE_DOUBLE"] = self.options.double
@@ -64,5 +56,9 @@ class tinyobjloaderRecipe(ConanFile):
         replace_in_file(self, header_fullpath, implementation, "")
 
     def package_info(self):
-        self.cpp_info.builddirs = [""]
         self.cpp_info.set_property("cmake_find_mode", "none")
+        self.cpp_info.set_property("cmake_file_name", "tinyobjloader")
+        self.cpp_info.builddirs = [
+            os.path.join("lib", "tinyobjloader", "cmake"),
+            os.path.join("lib64", "tinyobjloader", "cmake"),
+        ]
