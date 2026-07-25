@@ -11,3 +11,8 @@ sources:
     tag: 'v2026.12.1'
   '2026.12':
     tag: 'v2026.12'
+
+patches:
+  '2026.14':
+  - patch_file: 'patches/0001-add-public-latest-alias.patch'
+    patch_type: conan

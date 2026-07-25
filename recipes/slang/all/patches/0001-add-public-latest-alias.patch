@@ -1,0 +1,70 @@
+diff --git a/docs/command-line-slangc-reference.md b/docs/command-line-slangc-reference.md
+index 6c0c6dd39..b3e0af8c2 100644
+--- a/docs/command-line-slangc-reference.md
++++ b/docs/command-line-slangc-reference.md
+@@ -1717,6 +1717,7 @@ A capability describes an optional feature that a target may or may not support.
+ * `sm_6_9` 
+ * `sm_6_10_version` 
+ * `sm_6_10` 
++* `sm_latest` 
+ * `DX_4_0` 
+ * `DX_4_1` 
+ * `DX_5_0` 
+@@ -1743,6 +1744,7 @@ A capability describes an optional feature that a target may or may not support.
+ * `GLSL_440` : enables the GLSL_440 extension 
+ * `GLSL_450` : enables the GLSL_450 extension 
+ * `GLSL_460` : enables the GLSL_460 extension 
++* `GLSL_latest` : enables the GLSL_latest extension 
+ * `GLSL_410_SPIRV_1_0` : enables the GLSL_410_SPIRV_1_0 extension 
+ * `GLSL_420_SPIRV_1_0` : enables the GLSL_420_SPIRV_1_0 extension 
+ * `GLSL_430_SPIRV_1_0` : enables the GLSL_430_SPIRV_1_0 extension 
+diff --git a/docs/user-guide/a4-02-reference-capability-atoms.md b/docs/user-guide/a4-02-reference-capability-atoms.md
+index 2b29a7fab..6d72bce52 100644
+--- a/docs/user-guide/a4-02-reference-capability-atoms.md
++++ b/docs/user-guide/a4-02-reference-capability-atoms.md
+@@ -155,6 +155,9 @@ Versions
+ `GLSL_460`
+ > GLSL 460 and related capabilities of other targets.
+ 
++`GLSL_latest`
++> Represents the latest GLSL version.
++
+ `cuda_sm_1_0`
+ > cuda 1.0 and related capabilities of other targets.
+ 
+@@ -359,6 +362,9 @@ Versions
+ > HLSL shader model 6.9 and related capabilities of other targets.
+ > Does not include related GLSL/SPIRV extensions.
+ 
++`sm_latest`
++> Represents the latest HLSL shader model version.
++
+ `spirv_1_0`
+ > Represents SPIR-V 1.0 version.
+ 
+diff --git a/source/slang/slang-capabilities.capdef b/source/slang/slang-capabilities.capdef
+index 7df001dff..b00f519be 100644
+--- a/source/slang/slang-capabilities.capdef
++++ b/source/slang/slang-capabilities.capdef
+@@ -1995,6 +1995,10 @@ alias sm_6_10 = sm_6_10_version
+              | sm_6_9
+              ;
+ 
++/// Represents the latest HLSL shader model version.
++/// [Version]
++alias sm_latest = _sm_6_10;
++
+ // Profiles
+ /// Use `sm_4_0` instead
+ /// [Other]
+@@ -2199,6 +2203,10 @@ alias GLSL_460 = _GLSL_460
+                | GLSL_450
+                ;
+ 
++/// Represents the latest GLSL version.
++/// [Version]
++alias GLSL_latest = _GLSL_460;
++
+ /// User should not use this capability
+ /// [Other]
+ alias GLSL_410_SPIRV_1_0 = _GLSL_410 | spirv_1_0;
