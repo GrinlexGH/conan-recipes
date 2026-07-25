@@ -1,4 +1,8 @@
 versions:
+  '2026.14':
+    folder: all
+  '2026.13.1':
+    folder: all
   '2026.13':
     folder: all
   '2026.12.2':
