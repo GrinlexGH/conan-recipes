@@ -24,8 +24,16 @@ class VulkanMemoryAllocatorHppRecipe(ConanFile):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
         url = src_data.get("url", "https://github.com/YaaZ/VulkanMemoryAllocator-Hpp.git")
-        git.clone(url=url, target=self.source_folder)
-        git.checkout(src_data["tag"])
+
+        commit = src_data.get("commit")
+        tag = src_data.get("tag")
+
+        if commit:
+            git.fetch_commit(url=url, commit=commit)
+        elif tag:
+            git.clone(url=url, target=self.source_folder)
+            git.checkout(tag)
+
         apply_conandata_patches(self)
 
     def layout(self):

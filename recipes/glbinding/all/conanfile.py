@@ -60,3 +60,6 @@ class glbindingRecipe(ConanFile):
         self.cpp_info.set_property("cmake_find_mode", "none")
         self.cpp_info.set_property("cmake_file_name", "glbinding")
         self.cpp_info.builddirs = [""]
+        if self.settings.os == "Windows":
+            self.cpp_info.bindirs = [""]
+
