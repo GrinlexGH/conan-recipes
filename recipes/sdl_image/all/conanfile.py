@@ -12,6 +12,8 @@ class SDLImageRecipe(ConanFile):
     package_type = "library"
     implements = ["auto_shared_fpic"]
     settings = "os", "arch", "compiler", "build_type"
+    no_copy_source = True
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
@@ -58,8 +60,6 @@ class SDLImageRecipe(ConanFile):
         "with_xv": False,
     }
 
-    no_copy_source = True
-
     def build_requirements(self):
         if self.options.with_avif:
             self.build_requires("nasm/[>=3.01]")
@@ -72,7 +72,15 @@ class SDLImageRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url="https://github.com/libsdl-org/SDL_image.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
+        git.clone(
+            url="https://github.com/libsdl-org/SDL_image.git",
+            args=[
+                "--depth", "1",
+                "--branch", src_data["tag"],
+                "--recursive", "--shallow-submodules"
+            ],
+            target=self.source_folder
+        )
         apply_conandata_patches(self)
 
     def requirements(self):

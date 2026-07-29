@@ -1,9 +1,9 @@
 sources:
-  '3.4.0-pre':
-    url: 'https://github.com/GrinlexGH/VulkanMemoryAllocator-Hpp.git'
-    commit: '16a37458f8645f852c3af3334d7314f61d767e5a'
+  '3.4.0+1':
+    url: 'https://github.com/YaaZ/VulkanMemoryAllocator-Hpp/archive/refs/tags/v3.4.0+1.tar.gz'
+    sha256: 'af4b1e10c107c488fff004fdc8c8badb20d3fde36ad9cb859eb36d3833d28124'
 common_patches: &common_patches
   - patch_file: 'patches/0001-do-not-use-submodule.patch'
     patch_type: conan
 patches:
-  '3.4.0-pre': *common_patches
+  '3.4.0+1': *common_patches

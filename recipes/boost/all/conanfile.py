@@ -177,6 +177,8 @@ class BoostRecipe(ConanFile):
     package_type = "library"
     implements = ["auto_shared_fpic"]
     settings = "os", "arch", "compiler", "build_type"
+    no_copy_source = True
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
@@ -263,8 +265,6 @@ class BoostRecipe(ConanFile):
     }
     default_options.update({f"with_{_name}": None for _name in CONFIGURE_OPTIONS})
     default_options.update({f"without_{_name}": None for _name in CONFIGURE_OPTIONS})
-
-    no_copy_source = True
 
     _cached_dependencies = None
 

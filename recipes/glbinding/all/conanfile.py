@@ -12,6 +12,7 @@ class glbindingRecipe(ConanFile):
     package_type = "library"
     implements = ["auto_shared_fpic"]
     settings = "os", "arch", "compiler", "build_type"
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
@@ -30,7 +31,14 @@ class glbindingRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url="https://github.com/cginternals/glbinding.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
+        git.clone(
+            url="https://github.com/cginternals/glbinding.git",
+            args=[
+                "--depth", "1",
+                "--branch", src_data["tag"]
+            ],
+            target=self.source_folder
+        )
         apply_conandata_patches(self)
 
     def layout(self):

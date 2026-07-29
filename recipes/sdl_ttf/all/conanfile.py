@@ -12,6 +12,8 @@ class SDLttfRecipe(ConanFile):
     package_type = "library"
     implements = ["auto_shared_fpic"]
     settings = "os", "arch", "compiler", "build_type"
+    no_copy_source = True
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
@@ -22,8 +24,6 @@ class SDLttfRecipe(ConanFile):
         "fPIC": True,
     }
 
-    no_copy_source = True
-
     def export_sources(self):
         export_conandata_patches(self)
 
@@ -33,7 +33,15 @@ class SDLttfRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url="https://github.com/libsdl-org/SDL_ttf.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
+        git.clone(
+            url="https://github.com/libsdl-org/SDL_ttf.git",
+            args=[
+                "--depth", "1",
+                "--branch", src_data["tag"],
+                "--recursive", "--shallow-submodules"
+            ],
+            target=self.source_folder
+        )
         apply_conandata_patches(self)
 
     def layout(self):

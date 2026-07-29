@@ -19,8 +19,7 @@ class FrozenRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url="https://github.com/serge-sans-paille/frozen.git", target=self.source_folder)
-        git.checkout(src_data["commit"])
+        git.fetch_commit(url="https://github.com/serge-sans-paille/frozen.git", commit=src_data["commit"])
         apply_conandata_patches(self)
 
     def layout(self):

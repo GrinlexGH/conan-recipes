@@ -18,8 +18,7 @@ class StbRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url="https://github.com/nothings/stb.git", target=self.source_folder)
-        git.checkout(src_data["commit"])
+        git.fetch_commit(url="https://github.com/nothings/stb.git", commit=src_data["commit"])
         apply_conandata_patches(self)
 
     def package(self):

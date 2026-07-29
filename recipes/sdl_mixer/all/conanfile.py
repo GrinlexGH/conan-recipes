@@ -12,6 +12,8 @@ class SDLMixerRecipe(ConanFile):
     package_type = "library"
     implements = ["auto_shared_fpic"]
     settings = "os", "arch", "compiler", "build_type"
+    no_copy_source = True
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
@@ -46,8 +48,6 @@ class SDLMixerRecipe(ConanFile):
         "with_wavpack": True,
     }
 
-    no_copy_source = True
-
     def export_sources(self):
         export_conandata_patches(self)
 
@@ -57,13 +57,24 @@ class SDLMixerRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url="https://github.com/libsdl-org/SDL_mixer.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
+        git.clone(
+            url="https://github.com/libsdl-org/SDL_mixer.git",
+            args=[
+                "--depth", "1",
+                "--branch", src_data["tag"],
+                "--recursive", "--shallow-submodules"
+            ],
+            target=self.source_folder
+        )
         git.folder = os.path.join(self.source_folder, "external", "flac")
-        git.checkout("1.5.0")
+        git.run("fetch --depth 1 origin 1.5.0")
+        git.checkout("FETCH_HEAD")
         git.folder = os.path.join(self.source_folder, "external", "libgme")
-        git.checkout("0.6.5")
+        git.run("fetch --depth 1 origin 0.6.5")
+        git.checkout("FETCH_HEAD")
         git.folder = os.path.join(self.source_folder, "external", "opus")
-        git.checkout("v1.6.1")
+        git.run("fetch --depth 1 origin v1.6.1")
+        git.checkout("FETCH_HEAD")
         apply_conandata_patches(self)
 
     def layout(self):

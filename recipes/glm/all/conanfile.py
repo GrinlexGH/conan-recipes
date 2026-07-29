@@ -11,6 +11,7 @@ class glmRecipe(ConanFile):
     package_type = "library"
     implements = ["auto_shared_fpic"]
     settings = "os", "arch", "compiler", "build_type"
+
     options = {
         "shared": [True, False],
         "fPIC": [True, False],

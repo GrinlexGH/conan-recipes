@@ -12,12 +12,12 @@ index 2b9ef01..a41631b 100644
  
  if (NOT ${PROJECT_VERSION} STREQUAL ${VMA_HPP_PROJECT_VERSION})
 diff --git a/include/CMakeLists.txt b/include/CMakeLists.txt
-index 34ccd3a..14c808c 100644
+index 037035d..7aeddc3 100644
 --- a/include/CMakeLists.txt
 +++ b/include/CMakeLists.txt
-@@ -12,6 +12,7 @@ option(VMA_HPP_ENABLE_INSTALL "Install VulkanMemoryAllocator-Hpp" OFF)
- add_library(VulkanMemoryAllocator-Hpp INTERFACE)
+@@ -13,6 +13,7 @@ add_library(VulkanMemoryAllocator-Hpp INTERFACE)
  add_library(VulkanMemoryAllocator-Hpp::VulkanMemoryAllocator-Hpp ALIAS VulkanMemoryAllocator-Hpp)
+ add_library(VulkanMemoryAllocator::Hpp ALIAS VulkanMemoryAllocator-Hpp)
  target_include_directories(VulkanMemoryAllocator-Hpp INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 +target_link_libraries(VulkanMemoryAllocator-Hpp INTERFACE GPUOpen::VulkanMemoryAllocator)
  

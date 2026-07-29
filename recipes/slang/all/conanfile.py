@@ -13,6 +13,7 @@ class SlangRecipe(ConanFile):
     package_type = "library"
     implements = ["auto_shared_fpic"]
     settings = "os", "arch", "compiler", "build_type"
+    no_copy_source = True
 
     options = {
         "shared": [True, False],
@@ -38,8 +39,6 @@ class SlangRecipe(ConanFile):
         "with_replayer": False,
     }
 
-    no_copy_source = True
-
     def export_sources(self):
         export_conandata_patches(self)
 
@@ -57,7 +56,15 @@ class SlangRecipe(ConanFile):
     def source(self):
         src_data = self.conan_data["sources"][self.version]
         git = Git(self)
-        git.clone(url="https://github.com/shader-slang/slang.git", args=["--recursive", "--branch", src_data["tag"]], target=self.source_folder)
+        git.clone(
+            url="https://github.com/shader-slang/slang.git",
+            args=[
+                "--depth", "1",
+                "--branch", src_data["tag"],
+                "--recursive", "--shallow-submodules"
+            ],
+            target=self.source_folder
+        )
         apply_conandata_patches(self)
 
     def layout(self):

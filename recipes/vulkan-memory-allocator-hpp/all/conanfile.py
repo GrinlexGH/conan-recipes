@@ -2,8 +2,8 @@ import os
 
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
-from conan.tools.files import apply_conandata_patches, export_conandata_patches, copy
-from conan.tools.scm import Git, Version
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, get, copy
+from conan.tools.scm import Version
 
 required_conan_version = ">=2.20"
 
@@ -21,19 +21,7 @@ class VulkanMemoryAllocatorHppRecipe(ConanFile):
         self.requires(f"vulkan-memory-allocator/{".".join(map(str, Version(self.version).main))}")
 
     def source(self):
-        src_data = self.conan_data["sources"][self.version]
-        git = Git(self)
-        url = src_data.get("url", "https://github.com/YaaZ/VulkanMemoryAllocator-Hpp.git")
-
-        commit = src_data.get("commit")
-        tag = src_data.get("tag")
-
-        if commit:
-            git.fetch_commit(url=url, commit=commit)
-        elif tag:
-            git.clone(url=url, target=self.source_folder)
-            git.checkout(tag)
-
+        get(self, **self.conan_data["sources"][self.version], destination=self.source_folder, strip_root=True)
         apply_conandata_patches(self)
 
     def layout(self):

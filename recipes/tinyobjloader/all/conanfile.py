@@ -10,6 +10,7 @@ class tinyobjloaderRecipe(ConanFile):
     name = "tinyobjloader"
     package_type = "static-library"
     settings = "os", "arch", "compiler", "build_type"
+
     options = {
         "double": [True, False],
     }
