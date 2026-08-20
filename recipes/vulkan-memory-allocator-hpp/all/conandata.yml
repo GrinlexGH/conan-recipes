@@ -1,9 +1,14 @@
 sources:
+  '3.4.0+2':
+    url: 'https://github.com/YaaZ/VulkanMemoryAllocator-Hpp/archive/refs/tags/v3.4.0+2.tar.gz'
+    sha256: 'f7548cbca6e3f11ca06060d3964722cf52e524d535a5d85bc43a9ab6f74f0a5b'
   '3.4.0+1':
     url: 'https://github.com/YaaZ/VulkanMemoryAllocator-Hpp/archive/refs/tags/v3.4.0+1.tar.gz'
     sha256: 'af4b1e10c107c488fff004fdc8c8badb20d3fde36ad9cb859eb36d3833d28124'
-common_patches: &common_patches
+patches:
+  '3.4.0+2':
+  - patch_file: 'patches/0002-do-not-use-submodule.patch'
+    patch_type: conan
+  '3.4.0+1':
   - patch_file: 'patches/0001-do-not-use-submodule.patch'
     patch_type: conan
-patches:
-  '3.4.0+1': *common_patches
