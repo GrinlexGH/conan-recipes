@@ -1,0 +1,13 @@
+Submodule external/harfbuzz contains modified content
+diff --git a/external/harfbuzz/src/hb.hh b/external/harfbuzz/src/hb.hh
+index 0ceeb99..1e4512e 100644
+--- a/external/harfbuzz/src/hb.hh
++++ b/external/harfbuzz/src/hb.hh
+@@ -137,6 +137,7 @@
+ #pragma GCC diagnostic ignored "-Wrange-loop-analysis" // https://github.com/harfbuzz/harfbuzz/issues/2834
+ #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+ #pragma GCC diagnostic ignored "-Wtype-limits"
++#pragma GCC diagnostic ignored "-Wunused-template"
+ #pragma GCC diagnostic ignored "-Wc++11-compat" // only gcc raises it
+ #endif
+ 

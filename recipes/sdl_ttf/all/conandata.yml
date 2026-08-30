@@ -1,3 +1,7 @@
 sources:
   '3.2.2':
     tag: 'release-3.2.2'
+patches:
+  '3.2.2':
+    - patch_file: 'patches/0001-clang-fix.patch'
+      patch_type: conan
