@@ -1,0 +1,48 @@
+Submodule external/libpng contains modified content
+diff --git a/external/libpng/CMakeLists.txt b/external/libpng/CMakeLists.txt
+index dd0ab96db..21a05d651 100644
+--- a/external/libpng/CMakeLists.txt
++++ b/external/libpng/CMakeLists.txt
+@@ -402,10 +402,10 @@ VERS_2 { global: sym2; main; } VERS_1;
+   if(NOT CMAKE_HOST_SOLARIS)
+     # Avoid using CMAKE_SHARED_LIBRARY_C_FLAGS in version script checks on
+     # Solaris, because of an incompatibility with the Solaris link editor.
+-    list(APPEND CMAKE_REQUIRED_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
++    string(APPEND CMAKE_REQUIRED_FLAGS " ${CMAKE_SHARED_LIBRARY_C_FLAGS}")
+   endif()
+-  list(APPEND CMAKE_REQUIRED_FLAGS
+-              "-Wl,--version-script='${CMAKE_CURRENT_BINARY_DIR}/conftest.map'")
++  string(APPEND CMAKE_REQUIRED_FLAGS
++              " -Wl,--version-script='${CMAKE_CURRENT_BINARY_DIR}/conftest.map'")
+   check_c_source_compiles("
+ void sym1(void) {}
+ void sym2(void) {}
+@@ -416,9 +416,9 @@ int main(void) { return 0; }
+     if(NOT CMAKE_HOST_SOLARIS)
+       # Again, avoid using CMAKE_SHARED_LIBRARY_C_FLAGS in version script
+       # checks on Solaris.
+-      list(APPEND CMAKE_REQUIRED_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
++      string(APPEND CMAKE_REQUIRED_FLAGS " ${CMAKE_SHARED_LIBRARY_C_FLAGS}")
+     endif()
+-    list(APPEND CMAKE_REQUIRED_FLAGS "-Wl,-M -Wl,${CMAKE_CURRENT_BINARY_DIR}/conftest.map")
++    string(APPEND CMAKE_REQUIRED_FLAGS " -Wl,-M -Wl,${CMAKE_CURRENT_BINARY_DIR}/conftest.map")
+     check_c_source_compiles("
+ void sym1(void) {}
+ void sym2(void) {}
+Submodule external/libtiff contains modified content
+diff --git a/external/libtiff/cmake/LinkerChecks.cmake b/external/libtiff/cmake/LinkerChecks.cmake
+index 2901a574..7cdb220b 100644
+--- a/external/libtiff/cmake/LinkerChecks.cmake
++++ b/external/libtiff/cmake/LinkerChecks.cmake
+@@ -44,9 +44,9 @@ else()
+     ")
+     set(CMAKE_REQUIRED_FLAGS_SAVE ${CMAKE_REQUIRED_FLAGS})
+     if (CMAKE_VERSION GREATER_EQUAL 3.29 AND CMAKE_C_COMPILER_LINKER_ID STREQUAL "LLD" AND CMAKE_C_COMPILER_LINKER_VERSION GREATER_EQUAL 17)
+-        set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} -Wl,--undefined-version "-Wl,--version-script=${CMAKE_CURRENT_BINARY_DIR}/conftest.map")
++        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -Wl,--undefined-version -Wl,--version-script=${CMAKE_CURRENT_BINARY_DIR}/conftest.map")
+     else()
+-        set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} "-Wl,--version-script=${CMAKE_CURRENT_BINARY_DIR}/conftest.map")
++        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -Wl,--version-script=${CMAKE_CURRENT_BINARY_DIR}/conftest.map")
+     endif()
+ 
+     check_c_source_compiles("int main(void){return 0;}" HAVE_LD_VERSION_SCRIPT)
