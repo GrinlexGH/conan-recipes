@@ -1,4 +1,6 @@
 sources:
+  '2026.18.3':
+    tag: 'v2026.18.3'
   '2026.17.1':
     tag: 'v2026.17.1'
   '2026.17':
@@ -24,5 +26,5 @@ sources:
 
 patches:
   '2026.14':
-  - patch_file: 'patches/0001-add-public-latest-alias.patch'
-    patch_type: conan
+    - patch_file: 'patches/0001-add-public-latest-alias.patch'
+      patch_type: conan

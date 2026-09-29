@@ -1,4 +1,6 @@
 sources:
+  'cci.20260923':
+    commit: '1a6065fc39263b24e024317044d5833d690c474a'
   'cci.20260421':
     commit: 'b07a5c8187bc3e6f1461efab89fe07f467e300db'
   'cci.20260418':
