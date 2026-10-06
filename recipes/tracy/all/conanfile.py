@@ -15,20 +15,20 @@ class TracyRecipe(ConanFile):
         "shared": [True, False],
         "fPIC": [True, False],
         "on_demand": [True, False],
+        "manual_lifetime": [True, False],
         "no_broadcast": [True, False],
         "only_localhost": [True, False],
         "no_exit": [True, False],
-        "manual_lifetime": [True, False],
     }
 
     default_options = {
         "shared": False,
         "fPIC": True,
         "on_demand": True,
+        "manual_lifetime": True,
         "no_broadcast": False,
         "only_localhost": False,
         "no_exit": False,
-        "manual_lifetime": False,
     }
 
     @property
