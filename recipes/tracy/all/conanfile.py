@@ -14,6 +14,7 @@ class TracyRecipe(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
+        "enabled": [True, False],
         "on_demand": [True, False],
         "manual_lifetime": [True, False],
         "no_broadcast": [True, False],
@@ -24,6 +25,7 @@ class TracyRecipe(ConanFile):
     default_options = {
         "shared": False,
         "fPIC": True,
+        "enabled": True,
         "on_demand": True,
         "manual_lifetime": True,
         "no_broadcast": False,
@@ -49,7 +51,7 @@ class TracyRecipe(ConanFile):
         deps = CMakeConfigDeps(self)
         deps.generate()
         tc = CMakeToolchain(self)
-        tc.cache_variables["TRACY_ENABLE"] = True
+        tc.cache_variables["TRACY_ENABLE"] = bool(self.options.enabled)
         tc.cache_variables["TRACY_ON_DEMAND"] = bool(self.options.on_demand)
         tc.cache_variables["TRACY_NO_BROADCAST"] = bool(self.options.no_broadcast)
         tc.cache_variables["TRACY_ONLY_LOCALHOST"] = bool(self.options.only_localhost)
