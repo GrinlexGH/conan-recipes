@@ -1,4 +1,6 @@
 sources:
+  '3.4.8':
+    tag: 'release-3.4.8'
   '3.4.6':
     tag: 'release-3.4.6'
   '3.4.4':

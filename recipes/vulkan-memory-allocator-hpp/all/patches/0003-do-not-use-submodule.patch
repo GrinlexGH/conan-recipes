@@ -1,0 +1,25 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d2f65c5..8e2021d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -47,7 +47,7 @@ elseif (TARGET Vulkan-HppModule)
+     set(VMA_HPP_VULKAN_MODULE Vulkan-HppModule)
+ endif ()
+ 
+-add_subdirectory(VulkanMemoryAllocator)
++find_package(VulkanMemoryAllocator REQUIRED)
+ add_subdirectory(include)
+ 
+ if (NOT ${PROJECT_VERSION} STREQUAL ${VMA_HPP_PROJECT_VERSION})
+diff --git a/include/CMakeLists.txt b/include/CMakeLists.txt
+index 4d25b3d..4ec6b4d 100644
+--- a/include/CMakeLists.txt
++++ b/include/CMakeLists.txt
+@@ -12,6 +12,7 @@ option(VMA_HPP_ENABLE_INSTALL "Install VulkanMemoryAllocator-Hpp" OFF)
+ add_library(VulkanMemoryAllocator-Hpp INTERFACE)
+ add_library(VulkanMemoryAllocator-Hpp::VulkanMemoryAllocator-Hpp ALIAS VulkanMemoryAllocator-Hpp)
+ add_library(VulkanMemoryAllocator::Hpp ALIAS VulkanMemoryAllocator-Hpp)
++target_link_libraries(VulkanMemoryAllocator-Hpp INTERFACE GPUOpen::VulkanMemoryAllocator)
+ target_include_directories(VulkanMemoryAllocator-Hpp INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+ 
+ if (TARGET Vulkan::HppModule)
